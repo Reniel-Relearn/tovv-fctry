@@ -468,9 +468,14 @@ body.drawer-locked{ overflow:hidden; }
 
 .hero-cards{
   position:absolute;
-  top:11.126vw; /* 186px at the 1672px reference width -- vw-based (not px)
-    so the cards track the hero-art image's fluid vw-based scaling and stay
-    aligned with the truck at every viewport width, not just 1672px */
+  /* Mockup measured card top at page-absolute y=186 on the 1672x941 mockup,
+     but the hero-art crop starts at page-absolute y=152 (that's hero-art's
+     local y=0), and this container is positioned relative to .hero (which
+     aligns with hero-art's top). So the correct hero-relative offset is
+     186-152=34px, not 186px -- using the raw 186 put the cards ~150px too
+     low, overlapping the truck cab. vw-based (not px) so it still tracks
+     hero-art's fluid scaling at every viewport width. */
+  top:2.034vw; /* 34px at the 1672px reference width */
   left:0;
   width:100%;
   z-index:2;
