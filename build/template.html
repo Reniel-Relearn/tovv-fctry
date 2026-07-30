@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<title>Tow Factory — Affordable. Reliable. Ready 24/7.</title>
+<meta name="description" content="Client presentation preview for Tow Factory Towing Services — 24/7 towing, roadside assistance, and vehicle recovery across the Philippines.">
+<link rel="icon" href="data:image/x-icon;base64,{{FAVICON_B64}}" sizes="any">
+<style>
+/* ============================= FONTS ============================= */
+@font-face{
+  font-family:'Anton';
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url(data:font/woff2;base64,{{ANTON_B64}}) format('woff2');
+}
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:400 800;
+  font-display:swap;
+  src:url(data:font/woff2;base64,{{INTER_B64}}) format('woff2');
+}
+
+/* ============================= RESET ============================= */
+*,*::before,*::after{ box-sizing:border-box; }
+html{
+  scroll-behavior:smooth;
+  background:#000;
+  -webkit-text-size-adjust:100%;
+}
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text-2);
+  font-family:var(--font-ui);
+  font-size:16px;
+  line-height:1.5;
+  overflow-x:hidden;
+}
+img{ max-width:100%; display:block; }
+button{
+  font:inherit;
+  color:inherit;
+  background:none;
+  border:0;
+  padding:0;
+  margin:0;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  text-align:inherit;
+}
+a{ color:inherit; }
+ul{ margin:0; padding:0; list-style:none; }
+h1,h2,h3,h4,p{ margin:0; }
+:focus-visible{ outline:2px solid var(--cyan); outline-offset:3px; }
+
+/* ============================= TOKENS ============================= */
+:root{
+  /* colour */
+  --bg:#000000;
+  --panel:#050505;
+  --panel-2:#0b0b0c;
+  --border:rgba(255,255,255,.10);
+  --border-strong:rgba(255,255,255,.18);
+  --red-500:#a50201;
+  --red-600:#8e0100;
+  --red-700:#5d0304;
+  --red-accent:#c60000;
+  --green:#00ff73;
+  --cyan:#2fe5ec;
+  --text-1:#ededed;
+  --text-2:#c4c5c7;
+  --text-3:#a9a9ac;
+  --text-4:#7c7c80;
+
+  /* type */
+  --font-display:'Anton','Arial Narrow','Roboto Condensed',Impact,sans-serif;
+  --font-ui:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+
+  /* layout */
+  --container:1520px;
+  --gutter:min(4vw,75px);
+  --header-h:132px;
+  --header-h-mobile:92px;
+
+  /* radii */
+  --r-sm:6px;
+  --r-md:8px;
+  --r-lg:14px;
+  --r-pill:999px;
+
+  /* shadow */
+  --shadow-btn:0 10px 24px -8px rgba(165,2,1,.55);
+}
+
+/* ============================= LAYOUT HELPERS ============================= */
+.container{
+  width:100%;
+  max-width:var(--container);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+.visually-hidden{
+  position:absolute !important;
+  width:1px;height:1px;
+  padding:0;margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+.skip-link{
+  position:fixed;
+  top:-60px;
+  left:12px;
+  z-index:1000;
+  background:var(--red-500);
+  color:#fff;
+  padding:10px 16px;
+  border-radius:var(--r-sm);
+  font-weight:600;
+  transition:top .15s ease;
+}
+.skip-link:focus{ top:12px; }
+
+/* ============================= BUTTONS ============================= */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:16px 26px;
+  border-radius:var(--r-md);
+  font-family:var(--font-ui);
+  font-weight:700;
+  font-size:15px;
+  letter-spacing:.01em;
+  text-decoration:none;
+  cursor:pointer;
+  border:1px solid transparent;
+  transition:transform .12s ease, filter .15s ease, background-color .15s ease, border-color .15s ease;
+  white-space:nowrap;
+}
+.btn:active{ transform:translateY(1px); }
+.btn svg{ flex:none; width:18px; height:18px; }
+
+.btn-red{
+  background:linear-gradient(180deg,#b00604,var(--red-600));
+  color:#fff;
+  box-shadow:var(--shadow-btn);
+}
+.btn-red:hover{ filter:brightness(1.08); }
+
+.btn-outline{
+  background:rgba(255,255,255,.02);
+  color:var(--text-1);
+  border-color:var(--border-strong);
+}
+.btn-outline:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.32); }
+
+.btn-sm{ padding:11px 18px; font-size:13.5px; }
+.btn-block{ width:100%; }
+
+/* ============================= TOP UTILITY STRIP ============================= */
+.top-strip{
+  background:#000;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+  color:var(--text-3);
+}
+.top-strip-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  min-height:38px;
+  padding-block:9px;
+}
+.top-strip a{ text-decoration:none; color:inherit; }
+.top-strip a:hover{ color:var(--text-1); }
+.top-strip .ts-left,
+.top-strip .ts-center,
+.top-strip .ts-right{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+.top-strip .ts-center{ flex:1; justify-content:center; }
+.top-strip .ts-right{ gap:20px; }
+.top-strip .ts-right .divider{ width:1px; height:14px; background:var(--border-strong); }
+.top-strip svg{ width:15px; height:15px; flex:none; color:var(--red-accent); }
+.top-strip .ts-center svg{ color:var(--text-3); }
+.top-strip strong{ color:var(--text-1); font-weight:600; }
+.top-strip .hotline{ display:inline-flex; align-items:center; gap:7px; font-weight:600; color:var(--text-1); }
+
+/* ============================= HEADER / NAV ============================= */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:#000;
+  border-bottom:1px solid var(--border);
+}
+.nav-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  min-height:var(--header-h);
+}
+.nav-row{ overflow:visible; }
+.brand{
+  display:flex;
+  align-items:center;
+  flex:none;
+  text-decoration:none;
+  overflow:visible;
+}
+.brand img{
+  width:216px;
+  height:auto;
+  filter:drop-shadow(0 5px 14px rgba(0,0,0,.5));
+}
+
+.primary-nav{ display:flex; align-items:center; gap:2px; }
+.primary-nav > li{ position:relative; }
+.nav-link{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:10px 16px;
+  color:var(--text-2);
+  text-decoration:none;
+  font-size:15px;
+  font-weight:500;
+  border-radius:var(--r-sm);
+  position:relative;
+}
+.nav-link:hover{ color:var(--text-1); }
+.nav-link::after{
+  content:"";
+  position:absolute;
+  left:16px; right:16px; bottom:2px;
+  height:2px;
+  background:var(--red-accent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .18s ease;
+}
+.nav-link.is-active{ color:var(--text-1); }
+.nav-link.is-active::after,
+.nav-link:hover::after{ transform:scaleX(1); }
+.nav-link .chev{ width:13px; height:13px; transition:transform .15s ease; }
+
+.nav-item-dropdown:hover .nav-dropdown,
+.nav-item-dropdown:focus-within .nav-dropdown,
+.nav-item-dropdown.force-open .nav-dropdown{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+.nav-item-dropdown:hover .nav-link .chev,
+.nav-item-dropdown:focus-within .nav-link .chev,
+.nav-item-dropdown.force-open .nav-link .chev{ transform:rotate(180deg); }
+.nav-dropdown{
+  position:absolute;
+  top:100%;
+  left:0;
+  margin-top:6px;
+  min-width:280px;
+  background:#0a0a0a;
+  border:1px solid var(--border-strong);
+  border-radius:var(--r-lg);
+  padding:8px;
+  box-shadow:0 24px 48px -12px rgba(0,0,0,.7);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-6px);
+  transition:opacity .15s ease, transform .15s ease, visibility .15s ease;
+}
+.nav-dropdown a{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  padding:10px 12px;
+  border-radius:var(--r-sm);
+  text-decoration:none;
+  color:var(--text-1);
+  font-size:14px;
+  font-weight:600;
+}
+.nav-dropdown a span{ color:var(--text-3); font-size:12.5px; font-weight:400; }
+.nav-dropdown a:hover,
+.nav-dropdown a:focus-visible{ background:rgba(255,255,255,.06); }
+
+.header-cta{ display:flex; align-items:center; gap:10px; flex:none; }
+
+.nav-toggle{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  border-radius:var(--r-sm);
+  border:1px solid var(--border-strong);
+  background:transparent;
+  color:var(--text-1);
+  cursor:pointer;
+  flex:none;
+}
+.nav-toggle svg{ width:20px; height:20px; }
+
+/* ============================= MOBILE DRAWER ============================= */
+.drawer-scrim{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.6);
+  opacity:0; visibility:hidden;
+  transition:opacity .2s ease, visibility .2s ease;
+  z-index:150;
+}
+.drawer-scrim.is-open{ opacity:1; visibility:visible; }
+
+.drawer{
+  position:fixed;
+  top:0; right:0;
+  height:100%;
+  width:min(84vw,360px);
+  background:#050505;
+  border-left:1px solid var(--border-strong);
+  z-index:151;
+  transform:translateX(100%);
+  transition:transform .25s ease;
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+}
+.drawer.is-open{ transform:translateX(0); }
+.drawer-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px;
+  border-bottom:1px solid var(--border);
+}
+.drawer-close{
+  width:40px; height:40px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:var(--r-sm);
+  border:1px solid var(--border-strong);
+  background:transparent;
+  color:var(--text-1);
+  cursor:pointer;
+}
+.drawer-close svg{ width:18px; height:18px; }
+.drawer-nav{ padding:10px; display:flex; flex-direction:column; }
+.drawer-nav a,
+.drawer-nav button.drawer-sublink{
+  display:block;
+  width:100%;
+  text-align:left;
+  padding:14px 12px;
+  color:var(--text-1);
+  text-decoration:none;
+  font-size:16px;
+  font-weight:600;
+  border-bottom:1px solid var(--border);
+  background:none;
+  border-left:0;border-right:0;border-top:0;
+  cursor:pointer;
+}
+.drawer-sub{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .2s ease;
+}
+.drawer-sub.is-open{ max-height:400px; }
+.drawer-sub a{
+  font-size:14px;
+  font-weight:500;
+  color:var(--text-3);
+  padding-left:24px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.drawer-foot{ margin-top:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
+
+/* ============================= MOBILE HEADER RULES ============================= */
+@media (max-width:1024px){
+  .primary-nav, .header-cta .btn{ display:none; }
+  .nav-toggle{ display:flex; }
+  .nav-row{ min-height:var(--header-h-mobile); }
+  .brand img{ width:168px; }
+}
+@media (max-width:560px){
+  .top-strip .ts-center{ display:none; }
+  .top-strip-inner{ justify-content:space-between; }
+}
+
+body.drawer-locked{ overflow:hidden; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="top-strip">
+  <div class="container top-strip-inner">
+    <div class="ts-left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg>
+      <span><strong>24/7</strong> Roadside Assistance</span>
+    </div>
+    <div class="ts-center">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"/></svg>
+      <span>All Over the Philippines</span>
+    </div>
+    <div class="ts-right">
+      <a class="hotline" href="tel:+639693486078"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>(0969) 348 6078</a>
+      <span class="divider" aria-hidden="true"></span>
+      <a class="hotline" href="tel:+639451080849"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>(0945) 108 0849</a>
+    </div>
+  </div>
+</div>
+
+<header class="site-header" id="top">
+  <div class="container nav-row">
+    <a class="brand" href="#top" aria-label="Tow Factory home">
+      <img src="data:image/png;base64,{{LOGO_B64}}" alt="Tow Factory" width="580" height="410">
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="primary-nav">
+        <li><a class="nav-link is-active" data-nav href="#top">Home</a></li>
+        <li class="nav-item-dropdown">
+          <button class="nav-link" type="button" aria-expanded="false" aria-controls="services-dropdown">
+            Services
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="nav-dropdown" id="services-dropdown">
+            <a href="#svc-emergency-response">Emergency Response Team<span>24/7 rapid dispatch</span></a>
+            <a href="#svc-complete-vehicle-recovery">Complete Vehicle Recovery<span>Cars to heavy equipment</span></a>
+            <a href="#svc-roadside-help">Comprehensive Roadside Help<span>Battery, tire, fuel, lockout</span></a>
+            <a href="#svc-extended-distance-transport">Extended Distance Transport<span>Metro Manila, NLEX, SLEX, Luzon</span></a>
+            <a href="#svc-impound-lot-services">Impound Lot Services<span>Documentation handled</span></a>
+            <a href="#svc-advanced-tracking">Advanced Tracking System<span>Real-time GPS monitoring</span></a>
+          </div>
+        </li>
+        <li><a class="nav-link" data-nav href="#service-areas">Service Areas</a></li>
+        <li><a class="nav-link" data-nav href="#about">About</a></li>
+        <li><a class="nav-link" data-nav href="#reviews">Reviews</a></li>
+        <li><a class="nav-link" data-nav href="#faq">FAQ</a></li>
+        <li><a class="nav-link" data-nav href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn-red" href="tel:+639693486078">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>
+        Call Dispatch
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer" data-drawer-open>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer-scrim" data-drawer-scrim></div>
+<div class="drawer" id="mobile-drawer" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+  <div class="drawer-head">
+    <img src="data:image/png;base64,{{LOGO_B64}}" alt="Tow Factory" width="120" height="85" style="width:110px;height:auto;">
+    <button class="drawer-close" type="button" aria-label="Close menu" data-drawer-close>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <nav class="drawer-nav" aria-label="Mobile primary">
+    <a href="#top" data-nav data-drawer-link>Home</a>
+    <button class="drawer-sublink" type="button" aria-expanded="false" aria-controls="drawer-services-sub">
+      Services
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="width:13px;height:13px;float:right;transition:transform .15s ease;"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="drawer-sub" id="drawer-services-sub">
+      <a href="#svc-emergency-response" data-drawer-link>Emergency Response Team</a>
+      <a href="#svc-complete-vehicle-recovery" data-drawer-link>Complete Vehicle Recovery</a>
+      <a href="#svc-roadside-help" data-drawer-link>Comprehensive Roadside Help</a>
+      <a href="#svc-extended-distance-transport" data-drawer-link>Extended Distance Transport</a>
+      <a href="#svc-impound-lot-services" data-drawer-link>Impound Lot Services</a>
+      <a href="#svc-advanced-tracking" data-drawer-link>Advanced Tracking System</a>
+    </div>
+    <a href="#service-areas" data-nav data-drawer-link>Service Areas</a>
+    <a href="#about" data-nav data-drawer-link>About</a>
+    <a href="#reviews" data-nav data-drawer-link>Reviews</a>
+    <a href="#faq" data-nav data-drawer-link>FAQ</a>
+    <a href="#contact" data-nav data-drawer-link>Contact</a>
+  </nav>
+  <div class="drawer-foot">
+    <a class="btn btn-red btn-block" href="tel:+639693486078">Call (0969) 348 6078</a>
+    <a class="btn btn-outline btn-block" href="tel:+639451080849">Call (0945) 108 0849</a>
+  </div>
+</div>
+
+<main id="main">
+<!-- PHASE2_HERO -->
+<!-- PHASE3_SIGNAL_POSITIONING_PILLARS -->
+<!-- PHASE4_SERVICES_AREAS -->
+<!-- PHASE5_ABOUT_BRANDS_REVIEWS_FAQ -->
+<!-- PHASE6_CONTACT_CTA_FOOTER -->
+</main>
+
+<script id="content-data" type="application/json">{{CONTENT_JSON}}</script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Mobile drawer ---------- */
+  var drawer = document.getElementById('mobile-drawer');
+  var scrim = document.querySelector('[data-drawer-scrim]');
+  var openBtn = document.querySelector('[data-drawer-open]');
+  var closeBtn = document.querySelector('[data-drawer-close]');
+  var body = document.body;
+  var lastFocused = null;
+
+  function trapFocus(e){
+    if(e.key !== 'Tab') return;
+    var focusables = drawer.querySelectorAll('a[href], button:not([disabled])');
+    if(!focusables.length) return;
+    var first = focusables[0], last = focusables[focusables.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+
+  function openDrawer(){
+    lastFocused = document.activeElement;
+    drawer.classList.add('is-open');
+    scrim.classList.add('is-open');
+    body.classList.add('drawer-locked');
+    openBtn.setAttribute('aria-expanded','true');
+    drawer.addEventListener('keydown', trapFocus);
+    document.addEventListener('keydown', onEscape);
+    window.setTimeout(function(){ closeBtn.focus(); }, 50);
+  }
+  function closeDrawer(){
+    drawer.classList.remove('is-open');
+    scrim.classList.remove('is-open');
+    body.classList.remove('drawer-locked');
+    openBtn.setAttribute('aria-expanded','false');
+    drawer.removeEventListener('keydown', trapFocus);
+    document.removeEventListener('keydown', onEscape);
+    if(lastFocused) lastFocused.focus();
+  }
+  function onEscape(e){ if(e.key === 'Escape') closeDrawer(); }
+
+  openBtn.addEventListener('click', openDrawer);
+  closeBtn.addEventListener('click', closeDrawer);
+  scrim.addEventListener('click', closeDrawer);
+  document.querySelectorAll('[data-drawer-link]').forEach(function(a){
+    a.addEventListener('click', closeDrawer);
+  });
+
+  var drawerServicesBtn = document.querySelector('.drawer-sublink');
+  var drawerServicesSub = document.getElementById('drawer-services-sub');
+  if(drawerServicesBtn){
+    drawerServicesBtn.addEventListener('click', function(){
+      var open = drawerServicesSub.classList.toggle('is-open');
+      drawerServicesBtn.setAttribute('aria-expanded', String(open));
+      var chev = drawerServicesBtn.querySelector('.chev');
+      if(chev) chev.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+  }
+
+  /* ---------- Services dropdown keyboard support ---------- */
+  var dropdownBtn = document.querySelector('.nav-item-dropdown > .nav-link');
+  var dropdownWrap = document.querySelector('.nav-item-dropdown');
+  if(dropdownBtn && dropdownWrap){
+    function setDropdown(open){
+      dropdownBtn.setAttribute('aria-expanded', String(open));
+      dropdownWrap.classList.toggle('force-open', open);
+    }
+    dropdownBtn.addEventListener('click', function(){
+      setDropdown(dropdownBtn.getAttribute('aria-expanded') !== 'true');
+    });
+    dropdownWrap.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){ setDropdown(false); dropdownBtn.focus(); }
+    });
+    document.addEventListener('click', function(e){
+      if(!dropdownWrap.contains(e.target)) setDropdown(false);
+    });
+    dropdownWrap.addEventListener('focusout', function(e){
+      if(!dropdownWrap.contains(e.relatedTarget)) setDropdown(false);
+    });
+  }
+})();
+</script>
+</body>
+</html>

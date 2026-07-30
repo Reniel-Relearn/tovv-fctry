@@ -1,0 +1,295 @@
+{
+  "_notes": {
+    "purpose": "Authoritative, source-tagged copy deck for the Tow Factory client presentation. Phase 8 coverage audit checks every 'source'-tagged string against the rendered DOM.",
+    "tags": {
+      "source": "verbatim from a source-of-truth PDF, page cited",
+      "origin_mockup": "taken from the approved MAIN-LANDING-PAGE.png visual, not present in PDFs",
+      "origin_client": "supplied directly by the client in chat, overrides PDF/mockup where noted",
+      "origin_proposed": "written for this deck, not present in PDF or mockup; must be flagged to client",
+      "deferred": "explicitly postponed by client until after HTML output is finished"
+    }
+  },
+
+  "brand": {
+    "name": "TOW FACTORY",
+    "name_display": "Tow Factory",
+    "tagline_full": "TOW FACTORY TOWING SERVICES",
+    "copyright": "Copyright © 2026 TOW FACTORY Towing Services. All rights reserved.",
+    "_source": "home.pdf p5-6; branches.pdf p2; contact-us.pdf p2; services.pdf p3; about.pdf p4"
+  },
+
+  "contact": {
+    "phone_primary": "(0969) 348 6078",
+    "phone_primary_tel": "+639693486078",
+    "phone_secondary": "(0945) 108 0849",
+    "phone_secondary_tel": "+639451080849",
+    "email": "info@towfactory.com",
+    "_source_phones": "confirmed correct by client 2026-07-30, matches all 5 PDFs verbatim (home/about/branches/services/contact-us)",
+    "_note_mockup_mismatch": "MAIN-LANDING-PAGE.png mockup rendered 0969 346 6078 / 0945 106 0548 (digit-order variant) -- confirmed by client to be a mockup rendering artifact; PDF/client numbers are authoritative and used everywhere in the build",
+    "garage_addresses": [
+      "342 M. Ramoy compd. Quirino Hiway, Novaliches, Q.C.",
+      "Ortigas Technopoint One, 1 Doña Julia Vargas Ave., Pasig City"
+    ],
+    "office_address": "Block B16 Lot 50, Villa Hermosa, Buhay na Tubig, City of Imus",
+    "_source": "home.pdf p5; branches.pdf p1; contact-us.pdf p2; services.pdf p3; about.pdf p4"
+  },
+
+  "coverage": {
+    "hero_line_1": "All Over the Philippines",
+    "hero_line_2": "Nationwide Coverage.",
+    "_origin": "origin_mockup, confirmed authoritative by client 2026-07-30 (overrides the narrower PDF wording below for hero/marketing use)",
+    "pdf_scope_line": "MANILA, NLEX, SLEX, LUZON PROVINCES",
+    "pdf_scope_sentence": "Serving all major areas including Quezon City, Makati, Taguig, Marikina, Pasig, Pasay, Paranaque, Muntinlupa, Valenzuela, San Juan, Alabang, plus SLEX and NLEX corridors",
+    "_source_pdf_scope": "home.pdf p1,p2; about.pdf p1; services.pdf p1; branches.pdf p1 -- retained verbatim in Service Areas section as the detailed operational scope beneath the nationwide hero claim",
+    "cities": ["Quezon City", "Makati", "Taguig", "Marikina", "Pasig", "Pasay", "Parañaque", "Muntinlupa", "Valenzuela", "San Juan", "Alabang"],
+    "corridors": ["NLEX", "SLEX", "Luzon Provinces"]
+  },
+
+  "vehicle_types": {
+    "sentence": "Specialized towing solutions for passenger vehicles, commercial trucks, motorcycles, boats, and heavy equipment. Available around the clock for emergency response and scheduled transport services.",
+    "_source": "home.pdf p1; about.pdf p1"
+  },
+
+  "hero": {
+    "eyebrow": "24/7 towing & roadside assistance",
+    "headline_lines": ["Affordable.", "Reliable.", "Ready 24/7."],
+    "_origin_headline": "origin_mockup",
+    "kicker_recovered": "Professional Vehicle Recovery Services Ready Now!",
+    "_origin_kicker": "source: home.pdf p1 image-baked hero graphic (recovered via embedded bitmap OCR-equivalent read, not present in extractable text layer)",
+    "sub_promises_recovered": [
+      "Round-the-Clock Assistance Whenever You Need It!",
+      "Trusted Vehicle Transport Solutions.",
+      "Quick Response, Fair Pricing, & Dependable Service!"
+    ],
+    "_origin_sub_promises": "source: home.pdf p1 image-baked hero graphic (recovered)",
+    "rating_line_recovered": "Top-rated by over 100 satisfied clients",
+    "_origin_rating": "source: home.pdf p1 image-baked hero graphic (recovered)",
+    "top_strip_label": "24/7 Roadside Assistance",
+    "_origin_top_strip": "origin_mockup",
+    "cards": {
+      "dispatch_status": { "eyebrow": "DISPATCH STATUS", "value": "Available 24/7", "sub": "Our team is standing by." },
+      "coverage": { "eyebrow": "COVERAGE", "value": "All Over the Philippines", "sub": "Nationwide Coverage." }
+    },
+    "_origin_cards": "origin_mockup"
+  },
+
+  "buttons_hero": {
+    "primary": "Call for Immediate Assistance",
+    "secondary_location": "Send Your Location",
+    "secondary_quote": "Request a Quote",
+    "nav_cta": "Call Dispatch",
+    "_origin": "origin_mockup"
+  },
+
+  "signal_strip": {
+    "_origin": "origin_mockup",
+    "items": [
+      { "label": "24/7", "label2": "Assistance" },
+      { "label": "Transparent", "label2": "Pricing" },
+      { "label": "Vehicle", "label2": "Recovery" },
+      { "label": "Fast", "label2": "Response" },
+      { "label": "Safe & Secure", "label2": "Towing" },
+      { "label": "Experienced", "label2": "Professionals" }
+    ]
+  },
+
+  "positioning": {
+    "heading": "YOUR TRUSTED PARTNER IN VEHICLE RECOVERY",
+    "subheading": "Professional, Efficient, & Dependable",
+    "_source": "home.pdf p1; about.pdf p1"
+  },
+
+  "pillars": [
+    {
+      "title": "EXCEPTIONAL SERVICE EXCELLENCE",
+      "body": "Our commitment to excellence sets us apart. Every interaction is handled with care and professionalism, ensuring a smooth and worry-free experience."
+    },
+    {
+      "title": "ALWAYS THERE WHEN YOU NEED US",
+      "body": "Our fleet operates 24/7 throughout the year. We provide live tracking updates and advanced GPS technology to keep your vehicle secure during transport."
+    },
+    {
+      "title": "FAIR & TRANSPARENT PRICING",
+      "body": "No hidden costs or surprises. We offer honest, upfront pricing with competitive rates for professional-grade service without premium markups."
+    },
+    {
+      "title": "COMPLETE PROTECTION COVERAGE",
+      "body": "Every vehicle in our care is protected by comprehensive insurance coverage, giving you complete peace of mind and industry-leading protection."
+    }
+  ],
+  "_source_pillars": "home.pdf p2; about.pdf p2",
+
+  "promise_cards": [
+    {
+      "title": "Premium Customer Service",
+      "body": "We're proud to be your top choice for reliable towing services. From your first call to safe vehicle delivery, we prioritize your satisfaction. Our friendly team ensures a stress-free towing experience."
+    },
+    {
+      "title": "Reliable Redefined",
+      "body": "Count on us for quick, round-the-clock assistance, 365 days a year. We maintain constant communication and real-time updates on your vehicle's location. With GPS-monitored trucks, your vehicle's safety is assured at all times."
+    },
+    {
+      "title": "Affordable",
+      "body": "We provide top-notch towing assistance at competitive prices without hidden fees. Our transparent pricing guarantees you know exactly what you're paying for upfront. Enjoy premium quality service without breaking the bank."
+    }
+  ],
+  "_source_promise_cards": "home.pdf p2-3; about.pdf p2-3",
+
+  "commitment": {
+    "heading": "OUR COMMITMENT",
+    "body": "When you choose TOW FACTORY, you're choosing more than a service provider – you're choosing a trusted partner committed to your peace of mind. We combine technical expertise with genuine care, ensuring every vehicle is handled with the respect and attention it deserves. Your satisfaction and safety drive everything we do."
+  },
+  "_source_commitment": "home.pdf p3; about.pdf p3",
+
+  "about": {
+    "heading": "ABOUT TOW FACTORY",
+    "vision_label": "VISION",
+    "vision": "TOW FACTORY Towing Services is the Top of Mind Choice and the #1 Towing Services in the Philippines.",
+    "mission_label": "MISSION",
+    "mission": "TOW FACTORY Towing Services Brings Reliable, Safe and Efficient Transfer of Vehicles from Pick-up to Destination."
+  },
+  "_source_about": "about.pdf p1",
+
+  "services": {
+    "heading": "COMPREHENSIVE TOWING SOLUTIONS",
+    "subheading": "Professional towing and recovery services tailored to meet all your vehicle transport needs across Metro Manila and beyond.",
+    "cta_line": "Ready to help you right now - call our emergency hotline!",
+    "cards": [
+      {
+        "id": "emergency-response",
+        "title": "Emergency Response Team",
+        "body": "Our rapid response team is available every hour of every day. When emergencies strike, we're ready to assist immediately with professional equipment and trained personnel."
+      },
+      {
+        "id": "complete-vehicle-recovery",
+        "title": "Complete Vehicle Recovery",
+        "body": "Expert recovery services for all vehicle types - from compact cars to heavy-duty trucks, motorcycles to watercraft, and specialized commercial equipment."
+      },
+      {
+        "id": "roadside-help",
+        "title": "Comprehensive Roadside Help",
+        "body": "Full-service roadside support including dead battery assistance, flat tire replacement, emergency fuel supply, and lockout services to get you moving again."
+      },
+      {
+        "id": "extended-distance-transport",
+        "title": "Extended Distance Transport",
+        "body": "Long-haul towing capabilities covering Metro Manila, major expressways (NLEX, SLEX), and provinces throughout Luzon with reliable, safe transport."
+      },
+      {
+        "id": "impound-lot-services",
+        "title": "Impound Lot Services",
+        "body": "Specialized recovery from impound facilities with proper documentation handling and secure transport to your chosen location."
+      },
+      {
+        "id": "advanced-tracking",
+        "title": "Advanced Tracking System",
+        "body": "State-of-the-art GPS monitoring on all vehicles provides real-time location updates and ensures maximum security during transport operations."
+      }
+    ]
+  },
+  "_source_services": "services.pdf p1-2",
+
+  "service_areas": {
+    "heading": "SERVICE LOCATIONS",
+    "subheading": "Connect with our team at strategic locations throughout the Philippines, ready to serve your towing needs",
+    "branch_name": "MANILA BRANCH",
+    "continuous_ops_heading": "Continuous Operations",
+    "continuous_ops_body": "Every location maintains full operational capacity around the clock, ensuring assistance is available whenever emergencies arise, regardless of time or day.",
+    "service_area_line": "Metro Manila, NLEX, SLEX, Luzon Provinces"
+  },
+  "_source_service_areas": "branches.pdf p1",
+
+  "about_intro_main": {
+    "eyebrow": "About Tow Factory",
+    "body": "Tow Factory provides towing, roadside assistance, and scheduled transport for passenger vehicles, motorcycles, commercial trucks, boats, and heavy equipment.",
+    "_origin": "derived directly from vehicle_types.sentence (home.pdf p1 / about.pdf p1), condensed for the About intro card"
+  },
+
+  "brands": {
+    "heading": "VEHICLE BRANDS WE HANDLE",
+    "list": ["Honda", "Hyundai", "BMW", "Rapide", "Toyota"],
+    "_origin": "origin_client 2026-07-30 -- replaces the truncated/garbled PDF list ('RAPIDE, TOYOTA, HONDA, HY...' cut off at page edge in home.pdf p3)"
+  },
+
+  "reviews": {
+    "heading": "WHAT OUR CLIENTS SAY",
+    "subheading": "Real experiences from customers who trust us with their vehicle recovery needs",
+    "items": [
+      {
+        "name": "Sarah Martinez",
+        "date": "January 15, 2025",
+        "quote": "Outstanding service from start to finish! The team was professional, arrived on time, and handled my car with such care. The pricing was fair and transparent. Will definitely use TOW FACTORY again if needed. Highly recommended!"
+      },
+      {
+        "name": "Michael Chen",
+        "date": "3 weeks ago",
+        "quote": "Quick response time and excellent communication throughout. The driver was courteous and knowledgeable. Made a stressful situation much easier to handle. Five stars!"
+      },
+      {
+        "name": "Jennifer Lopez",
+        "date": "1 month ago",
+        "quote": "I was stranded late at night and they came to my rescue within 30 minutes. The service was professional, the rates were reasonable, and they even helped me with some paperwork. Truly grateful for their help!"
+      },
+      {
+        "name": "Robert Santos",
+        "date": "2 months ago",
+        "quote": "Used their service for my business vehicle. Fast, reliable, and very accommodating. The team understood my urgent situation and delivered exactly as promised. Great value for money."
+      },
+      {
+        "name": "Maria Garcia",
+        "date": "6 weeks ago",
+        "quote": "What impressed me most was their flexibility with payment options. When I had limited cash access, they worked with me to find a solution. The staff was understanding and professional throughout the entire process."
+      },
+      {
+        "name": "David Kim",
+        "date": "December 20, 2024",
+        "quote": "Professional service from the moment I called. They kept me updated on arrival time and handled everything efficiently. My vehicle arrived safely at the destination. Would use their services again without hesitation."
+      }
+    ],
+    "_note_dates": "relative dates ('3 weeks ago' etc.) reproduced verbatim from home.pdf p4-5 for fidelity; will drift out of date and should be converted to absolute dates by the client before public launch"
+  },
+  "_source_reviews": "home.pdf p3-5",
+
+  "faq": {
+    "_status": "deferred",
+    "_note": "Client instructed 2026-07-30: add FAQ content after the HTML output is finished. Nav item and #faq anchor are wired in the build; content to follow in a later pass."
+  },
+
+  "legal": {
+    "_status": "deferred",
+    "_note": "Client instructed 2026-07-30: add Privacy Policy / Terms & Conditions content after the HTML output is finished. Footer links and modal shells are wired in the build; content to follow in a later pass."
+  },
+
+  "contact_page": {
+    "heading": "Get In Touch",
+    "body_1": "Experiencing a roadside emergency or need professional vehicle towing? Our dedicated team is here to provide prompt, reliable assistance whenever you need it most. Don't hesitate to reach out - we're ready to help you get back on the road safely and quickly.",
+    "body_2": "Whether it's an urgent breakdown, accident recovery, or scheduled transport, contact us today and experience the difference that professional, caring service makes. Your peace of mind is our priority.",
+    "form_fields": ["First Name", "Last Name", "Email", "Phone Number", "Message"],
+    "submit_label": "SUBMIT"
+  },
+  "_source_contact_page": "contact-us.pdf p1",
+
+  "get_in_touch_band": {
+    "heading": "GET IN TOUCH",
+    "subheading": "Reach out to our team today!"
+  },
+  "_source_get_in_touch_band": "home.pdf p5; services.pdf p3; branches.pdf p2; contact-us.pdf p2; about.pdf p3-4",
+
+  "cta_band": {
+    "need_help": "NEED HELP? CALL",
+    "scope_line": "MANILA, NLEX, SLEX, LUZON PROVINCES"
+  },
+  "_source_cta_band": "present on every PDF page",
+
+  "footer": {
+    "quick_links_label": "QUICK LINKS",
+    "quick_links": ["Home", "About", "Services", "Branch Locator", "Contact", "Privacy Policy", "Terms & Conditions"],
+    "contact_us_label": "CONTACT US",
+    "garage_label": "Garage Address:",
+    "office_label": "Office Address:",
+    "manila_prefix": "Manila:",
+    "footer_body_1": "Experiencing a vehicle breakdown or need professional towing assistance? We're here to help! Our experienced team provides round-the-clock support for all your towing needs. From emergency roadside situations to scheduled vehicle transport, we deliver reliable solutions with professionalism and care. Your vehicle's safety and your peace of mind matter most to us. Contact us today and experience the difference quality service makes!",
+    "footer_body_2": "We deliver exceptional towing and roadside assistance services, ensuring every vehicle receives expert care from pickup to final destination. Our commitment to excellence means your vehicle arrives safely, on time, and in perfect condition."
+  },
+  "_source_footer": "present on every PDF page footer"
+}
