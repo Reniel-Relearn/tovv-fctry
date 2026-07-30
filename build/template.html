@@ -1212,6 +1212,103 @@ h2.condensed{
 }
 .legal-modal-close svg{ width:16px; height:16px; }
 .legal-modal p{ font-size:14.5px; color:var(--text-3); line-height:1.7; }
+
+/* ============================= MOBILE STICKY BAR ============================= */
+.mobile-bar{
+  display:none;
+  position:fixed;
+  left:0; right:0; bottom:0;
+  z-index:90;
+  background:#050505;
+  border-top:1px solid var(--border-strong);
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+.mobile-bar a,.mobile-bar button{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  padding:10px 6px 12px;
+  font-size:11.5px;
+  font-weight:600;
+  color:var(--text-2);
+  text-decoration:none;
+  text-align:center;
+}
+.mobile-bar a{ color:#fff; background:linear-gradient(180deg,#b00604,var(--red-600)); }
+.mobile-bar svg{ width:20px; height:20px; }
+@media (max-width:1023px){
+  .mobile-bar{ display:flex; }
+  body{ padding-bottom:64px; }
+}
+
+.back-to-top{
+  position:fixed;
+  right:20px;
+  bottom:84px;
+  z-index:89;
+  width:44px; height:44px;
+  border-radius:50%;
+  background:#0a0a0a;
+  border:1px solid var(--border-strong);
+  color:var(--text-1);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(8px);
+  transition:opacity .2s ease, transform .2s ease, visibility .2s ease;
+  box-shadow:0 10px 24px -8px rgba(0,0,0,.6);
+}
+.back-to-top.is-visible{ opacity:1; visibility:visible; transform:translateY(0); }
+.back-to-top svg{ width:19px; height:19px; }
+@media (min-width:1024px){
+  .back-to-top{ bottom:28px; }
+}
+
+/* ============================= SCROLL REVEAL ============================= */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .5s ease, transform .5s ease;
+}
+[data-reveal].is-revealed{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion:reduce){
+  [data-reveal]{ opacity:1; transform:none; transition:none; }
+}
+
+/* ============================= PRINT ============================= */
+@media print{
+  :root{
+    --bg:#fff;
+    --panel:#f4f4f4;
+    --panel-2:#eee;
+    --border:#ccc;
+    --border-strong:#999;
+    --text-1:#111;
+    --text-2:#333;
+    --text-3:#555;
+    --text-4:#777;
+  }
+  .top-strip,.site-header,.mobile-bar,.back-to-top,.modal-scrim,.legal-modal,.drawer,.drawer-scrim{ display:none !important; }
+  html,body{ padding-bottom:0 !important; background:#fff !important; color:#111 !important; }
+  .section,.hero,.hero-inner,.signal-strip,.brands-section,.final-cta-band,.site-footer,
+  .service-card,.pillar,.promise-card,.review-card,.mission-card,.branch-panel,.coverage-panel,
+  .contact-form,.commitment-panel,.hero-card,.positioning-media{
+    background:#fff !important;
+    box-shadow:none !important;
+  }
+  .btn{ box-shadow:none !important; }
+  .btn-red{ background:#a50201 !important; color:#fff !important; }
+  .btn-outline{ border-color:#999 !important; color:#111 !important; }
+  .hero-art{ display:none !important; }
+  .marquee-track{ animation:none !important; }
+  [data-reveal]{ opacity:1 !important; transform:none !important; }
+  .faq-a{ max-height:none !important; }
+  .service-card,.pillar,.promise-card,.review-card,.mission-card,.branch-panel,.coverage-panel,
+  .commitment-panel,.contact-form{ border-color:#ccc !important; }
+  a[href^="tel:"]::after,a[href^="mailto:"]::after{ content:" (" attr(href) ")"; font-size:11px; color:#555; }
+}
 </style>
 </head>
 <body>
@@ -1492,7 +1589,7 @@ h2.condensed{
           <h3>Complete Vehicle Recovery</h3>
           <p>Expert recovery services for all vehicle types - from compact cars to heavy-duty trucks, motorcycles to watercraft, and specialized commercial equipment.</p>
         </div>
-        <a class="service-card-link" href="#contact" data-scroll-quote>Request assistance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="service-card-link" href="#contact" data-scroll-quote data-service="Vehicle recovery">Request assistance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </article>
       <article class="service-card" id="svc-roadside-help">
         <div>
@@ -1500,7 +1597,7 @@ h2.condensed{
           <h3>Comprehensive Roadside Help</h3>
           <p>Full-service roadside support including dead battery assistance, flat tire replacement, emergency fuel supply, and lockout services to get you moving again.</p>
         </div>
-        <a class="service-card-link" href="#contact" data-scroll-quote>Choose roadside help <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="service-card-link" href="#contact" data-scroll-quote data-service="Roadside assistance">Choose roadside help <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </article>
       <article class="service-card" id="svc-extended-distance-transport">
         <div>
@@ -1508,7 +1605,7 @@ h2.condensed{
           <h3>Extended Distance Transport</h3>
           <p>Long-haul towing capabilities covering Metro Manila, major expressways (NLEX, SLEX), and provinces throughout Luzon with reliable, safe transport.</p>
         </div>
-        <a class="service-card-link" href="#contact" data-scroll-quote>Get a transport quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="service-card-link" href="#contact" data-scroll-quote data-service="Extended distance transport">Get a transport quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </article>
       <article class="service-card" id="svc-impound-lot-services">
         <div>
@@ -1516,7 +1613,7 @@ h2.condensed{
           <h3>Impound Lot Services</h3>
           <p>Specialized recovery from impound facilities with proper documentation handling and secure transport to your chosen location.</p>
         </div>
-        <a class="service-card-link" href="#contact" data-scroll-quote>Start an impound request <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="service-card-link" href="#contact" data-scroll-quote data-service="Impound recovery">Start an impound request <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </article>
       <article class="service-card" id="svc-advanced-tracking">
         <div>
@@ -1524,7 +1621,7 @@ h2.condensed{
           <h3>Advanced Tracking System</h3>
           <p>State-of-the-art GPS monitoring on all vehicles provides real-time location updates and ensures maximum security during transport operations.</p>
         </div>
-        <a class="service-card-link" href="#contact" data-scroll-quote>Check vehicle support <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="service-card-link" href="#contact" data-scroll-quote data-service="Vehicle tracking / other">Check vehicle support <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </article>
     </div>
   </div>
@@ -1853,6 +1950,25 @@ h2.condensed{
   </div>
   <p>Tow Factory's Terms &amp; Conditions are being finalized with the client and will be published here once approved. This link is fully wired and ready for that content.</p>
 </div>
+
+<div class="mobile-bar" aria-label="Quick actions">
+  <a href="tel:+639693486078">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>
+    Call
+  </a>
+  <button type="button" data-send-location>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+    Location
+  </button>
+  <button type="button" data-scroll-quote>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6.5 8 6 8-6"/></svg>
+    Get Quote
+  </button>
+</div>
+
+<button class="back-to-top" type="button" data-back-to-top aria-label="Back to top" hidden>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 </main>
 
 <script id="content-data" type="application/json">{{CONTENT_JSON}}</script>
@@ -1936,6 +2052,246 @@ h2.condensed{
     dropdownWrap.addEventListener('focusout', function(e){
       if(!dropdownWrap.contains(e.relatedTarget)) setDropdown(false);
     });
+  }
+
+  /* ---------- Smooth in-page navigation without polluting history ---------- */
+  var headerEl = document.querySelector('.site-header');
+  function scrollToId(id, focusTarget){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if(history.replaceState) history.replaceState(null, '', '#' + id);
+    if(focusTarget){
+      window.setTimeout(function(){
+        focusTarget.focus({ preventScroll: true });
+      }, 500);
+    }
+  }
+  document.querySelectorAll('a[data-nav]:not([data-scroll-quote])').forEach(function(a){
+    var href = a.getAttribute('href') || '';
+    if(href.charAt(0) !== '#' || href.length < 2) return;
+    a.addEventListener('click', function(e){
+      var id = href.slice(1);
+      if(!document.getElementById(id)) return;
+      e.preventDefault();
+      scrollToId(id);
+    });
+  });
+
+  /* ---------- Scrollspy: highlight the active nav item as sections pass ---------- */
+  var spySections = ['services', 'service-areas', 'about', 'reviews', 'faq', 'contact']
+    .map(function(id){ return document.getElementById(id); })
+    .filter(Boolean);
+  var navLinksByHref = {};
+  document.querySelectorAll('.primary-nav .nav-link[data-nav], .drawer-nav a[data-nav]').forEach(function(a){
+    var href = a.getAttribute('href');
+    (navLinksByHref[href] = navLinksByHref[href] || []).push(a);
+  });
+  function setActiveHash(hash){
+    Object.keys(navLinksByHref).forEach(function(href){
+      navLinksByHref[href].forEach(function(a){
+        a.classList.toggle('is-active', href === hash);
+      });
+    });
+  }
+  if('IntersectionObserver' in window && spySections.length){
+    var spyObserver = new IntersectionObserver(function(entries){
+      var visible = entries.filter(function(en){ return en.isIntersecting; });
+      if(!visible.length) return;
+      visible.sort(function(a,b){ return b.intersectionRatio - a.intersectionRatio; });
+      setActiveHash('#' + visible[0].target.id);
+    }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+    spySections.forEach(function(s){ spyObserver.observe(s); });
+
+    window.addEventListener('scroll', function(){
+      if(window.scrollY < 200) setActiveHash('#top');
+    }, { passive: true });
+  }
+
+  /* ---------- Send Your Location ---------- */
+  var locationInput = document.getElementById('cf-message');
+  var locationMessageEls = document.querySelectorAll('[data-send-location]');
+  function handleSendLocation(){
+    var originalLabel = null;
+    locationMessageEls.forEach(function(btn){
+      if(btn.tagName === 'BUTTON') btn.disabled = true;
+    });
+    function onDone(text){
+      scrollToId('contact', document.getElementById('cf-message'));
+      if(locationInput && text){
+        locationInput.value = (locationInput.value ? locationInput.value + '\n' : '') + text;
+      }
+      locationMessageEls.forEach(function(btn){
+        if(btn.tagName === 'BUTTON') btn.disabled = false;
+      });
+    }
+    if(!('geolocation' in navigator)){
+      onDone('My current location: (location sharing is not available in this browser -- please describe your location above.)');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(function(pos){
+      var lat = pos.coords.latitude.toFixed(6);
+      var lng = pos.coords.longitude.toFixed(6);
+      var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng;
+      onDone('My current location: ' + lat + ', ' + lng + ' (' + mapsUrl + ')');
+    }, function(){
+      onDone('My current location: (location permission was not granted -- please describe your location above.)');
+    }, { enableHighAccuracy: true, timeout: 8000 });
+  }
+  locationMessageEls.forEach(function(el){
+    el.addEventListener('click', handleSendLocation);
+  });
+
+  /* ---------- Request a Quote / scroll-to-contact with optional service preselect ---------- */
+  document.querySelectorAll('[data-scroll-quote]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      if(el.tagName === 'A') e.preventDefault();
+      var service = el.getAttribute('data-service');
+      var serviceField = document.getElementById('cf-service');
+      if(service && serviceField){
+        var match = Array.prototype.find.call(serviceField.options, function(o){ return o.text === service; });
+        if(match) serviceField.value = service;
+      }
+      scrollToId('contact', document.getElementById('cf-first'));
+    });
+  });
+
+  /* ---------- Legal modals ---------- */
+  var modalScrim = document.querySelector('[data-modal-scrim]');
+  var openModalEl = null;
+  var lastModalFocus = null;
+  function trapModalFocus(e){
+    if(e.key !== 'Tab' || !openModalEl) return;
+    var focusables = openModalEl.querySelectorAll('a[href], button:not([disabled])');
+    if(!focusables.length) return;
+    var first = focusables[0], last = focusables[focusables.length - 1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+  function openModal(name){
+    var modal = document.getElementById('modal-' + name);
+    if(!modal) return;
+    lastModalFocus = document.activeElement;
+    openModalEl = modal;
+    modal.classList.add('is-open');
+    modalScrim.classList.add('is-open');
+    document.body.classList.add('drawer-locked');
+    document.addEventListener('keydown', onModalKeydown);
+    window.setTimeout(function(){
+      var closeBtn = modal.querySelector('[data-modal-close]');
+      if(closeBtn) closeBtn.focus();
+    }, 50);
+  }
+  function closeModal(){
+    if(!openModalEl) return;
+    openModalEl.classList.remove('is-open');
+    modalScrim.classList.remove('is-open');
+    document.body.classList.remove('drawer-locked');
+    document.removeEventListener('keydown', onModalKeydown);
+    if(lastModalFocus) lastModalFocus.focus();
+    openModalEl = null;
+  }
+  function onModalKeydown(e){
+    if(e.key === 'Escape') closeModal();
+    else trapModalFocus(e);
+  }
+  document.querySelectorAll('[data-modal-open]').forEach(function(btn){
+    btn.addEventListener('click', function(){ openModal(btn.getAttribute('data-modal-open')); });
+  });
+  document.querySelectorAll('[data-modal-close]').forEach(function(btn){
+    btn.addEventListener('click', closeModal);
+  });
+  if(modalScrim) modalScrim.addEventListener('click', closeModal);
+
+  /* ---------- Contact form validation + fake submit ---------- */
+  var contactForm = document.getElementById('contact-form');
+  if(contactForm){
+    var successBox = document.getElementById('contact-success');
+    var phonePattern = /^(\+63|0)9\d{2}[\s-]?\d{3}[\s-]?\d{4}$/;
+    function setFieldError(field, hasError){
+      field.classList.toggle('has-error', hasError);
+      var input = field.querySelector('input, textarea');
+      if(input) input.setAttribute('aria-invalid', hasError ? 'true' : 'false');
+    }
+    function validate(){
+      var firstEl = document.getElementById('cf-first');
+      var lastEl = document.getElementById('cf-last');
+      var emailEl = document.getElementById('cf-email');
+      var phoneEl = document.getElementById('cf-phone');
+      var checks = [
+        { field: firstEl.closest('.field'), ok: firstEl.value.trim().length > 0, input: firstEl },
+        { field: lastEl.closest('.field'), ok: lastEl.value.trim().length > 0, input: lastEl },
+        { field: emailEl.closest('.field'), ok: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim()), input: emailEl },
+        { field: phoneEl.closest('.field'), ok: phonePattern.test(phoneEl.value.trim()), input: phoneEl }
+      ];
+      var firstInvalid = null;
+      checks.forEach(function(c){
+        setFieldError(c.field, !c.ok);
+        if(!c.ok && !firstInvalid) firstInvalid = c.input;
+      });
+      return firstInvalid;
+    }
+    contactForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var firstInvalid = validate();
+      if(firstInvalid){
+        firstInvalid.focus();
+        successBox.hidden = true;
+        return;
+      }
+      var data = new FormData(contactForm);
+      var summary = ['first name', 'last name', 'email', 'phone', 'service', 'message']
+        .map(function(k){
+          var raw = data.get(k === 'first name' ? 'firstName' : k === 'last name' ? 'lastName' : k);
+          return raw ? String(raw).trim() : '';
+        });
+      successBox.innerHTML =
+        '<b>Preview only -- no message was actually sent.</b><br>' +
+        'If this were live, Tow Factory would receive: ' +
+        (summary[0] + ' ' + summary[1]).trim() + ', ' + summary[2] + ', ' + summary[3] +
+        (summary[4] ? ' &mdash; ' + summary[4] : '') +
+        (summary[5] ? '<br>&ldquo;' + summary[5].replace(/</g, '&lt;') + '&rdquo;' : '');
+      successBox.hidden = false;
+      successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    contactForm.querySelectorAll('input, textarea').forEach(function(input){
+      input.addEventListener('input', function(){
+        var field = input.closest('.field');
+        if(field && field.classList.contains('has-error')) setFieldError(field, false);
+      });
+    });
+  }
+
+  /* ---------- Back to top ---------- */
+  var backToTop = document.querySelector('[data-back-to-top]');
+  if(backToTop){
+    backToTop.hidden = false;
+    window.addEventListener('scroll', function(){
+      backToTop.classList.toggle('is-visible', window.scrollY > window.innerHeight * 1.4);
+    }, { passive: true });
+    backToTop.addEventListener('click', function(){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if(history.replaceState) history.replaceState(null, '', location.pathname + location.search);
+    });
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  var revealTargets = document.querySelectorAll(
+    '.service-card, .pillar, .promise-card, .review-card, .mission-card, .signal-item, ' +
+    '.branch-panel, .coverage-panel, .positioning-copy, .positioning-media, ' +
+    '.about-main, .mission-stack, .contact-form, .contact-copy, .commitment-panel'
+  );
+  if('IntersectionObserver' in window && revealTargets.length){
+    revealTargets.forEach(function(el){ el.setAttribute('data-reveal', ''); });
+    var revealObserver = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-revealed');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    revealTargets.forEach(function(el){ revealObserver.observe(el); });
   }
 })();
 </script>
