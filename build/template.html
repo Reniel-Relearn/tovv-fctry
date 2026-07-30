@@ -1042,6 +1042,176 @@ h2.condensed{
   line-height:1.7;
 }
 .faq-pending b{ color:var(--text-2); }
+
+/* ============================= CONTACT ============================= */
+.contact-grid{
+  display:grid;
+  grid-template-columns:0.85fr 1fr;
+  gap:56px;
+  align-items:start;
+}
+.contact-copy h2{ margin-bottom:18px; }
+.contact-copy p{ font-size:15.5px; color:var(--text-2); line-height:1.75; margin-bottom:16px; }
+.contact-rail{ margin-top:26px; display:flex; flex-direction:column; gap:14px; }
+.contact-rail-item{ display:flex; align-items:flex-start; gap:12px; }
+.contact-rail-item svg{ width:18px; height:18px; flex:none; margin-top:2px; color:var(--red-accent); }
+.contact-rail-item a,.contact-rail-item span{ color:var(--text-2); text-decoration:none; font-size:14.5px; line-height:1.6; }
+.contact-rail-item a:hover{ color:var(--text-1); text-decoration:underline; }
+
+.contact-form{
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:32px;
+  background:#050505;
+}
+.form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.field{ margin-bottom:16px; }
+.field label{
+  display:block;
+  font-size:12.5px;
+  font-weight:600;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  margin-bottom:8px;
+}
+.field input,.field textarea,.field select{
+  width:100%;
+  background:#0b0b0b;
+  border:1px solid var(--border-strong);
+  border-radius:var(--r-sm);
+  padding:12px 14px;
+  color:var(--text-1);
+  font-family:var(--font-ui);
+  font-size:14.5px;
+}
+.field input:focus,.field textarea:focus,.field select:focus{ outline:2px solid var(--cyan); outline-offset:1px; border-color:transparent; }
+.field textarea{ resize:vertical; min-height:110px; }
+.field.has-error input,.field.has-error textarea{ border-color:var(--red-accent); }
+.field-error{ display:none; margin-top:6px; font-size:12.5px; color:#ff6b6b; }
+.field.has-error .field-error{ display:block; }
+.form-note{ font-size:12.5px; color:var(--text-4); margin-top:14px; text-align:center; }
+.form-success{
+  margin-top:18px;
+  padding:16px 18px;
+  border:1px solid rgba(0,255,115,.3);
+  border-radius:var(--r-md);
+  background:rgba(0,255,115,.06);
+  font-size:14px;
+  color:var(--text-1);
+  line-height:1.6;
+}
+.form-success b{ color:var(--green); }
+@media (max-width:900px){
+  .contact-grid{ grid-template-columns:1fr; gap:36px; }
+}
+@media (max-width:560px){
+  .form-row{ grid-template-columns:1fr; }
+  .contact-form{ padding:24px 20px; }
+}
+
+/* ============================= FINAL CTA BAND ============================= */
+.final-cta-band{
+  border-block:1px solid var(--border);
+  background:#030303;
+  padding-block:44px;
+  text-align:center;
+}
+.final-cta-band .eyebrow{ justify-content:center; display:flex; }
+.final-cta-band .hero-actions{ justify-content:center; margin:18px 0; }
+.final-cta-band .scope-line{ font-size:13px; letter-spacing:.06em; color:var(--text-3); text-transform:uppercase; }
+
+/* ============================= FOOTER ============================= */
+.site-footer{ background:#000; padding-top:64px; }
+.footer-cta{ text-align:center; margin-bottom:56px; }
+.footer-cta p{ color:var(--text-2); font-size:16px; margin-top:10px; }
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.3fr 0.8fr 1.1fr;
+  gap:40px;
+  padding-bottom:40px;
+  border-bottom:1px solid var(--border);
+}
+.footer-brand-col img{ width:150px; height:auto; margin-bottom:16px; }
+.footer-brand-col p{ font-size:14px; color:var(--text-3); line-height:1.7; max-width:320px; }
+.footer-grid h4{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--text-1);
+  margin-bottom:18px;
+}
+.footer-grid ul{ display:flex; flex-direction:column; gap:11px; }
+.footer-grid ul a,.footer-grid ul button{ display:block; color:var(--text-3); text-decoration:none; font-size:14.5px; text-align:left; }
+.footer-grid ul a:hover,.footer-grid ul button:hover{ color:var(--text-1); }
+.footer-contact-item{ margin-bottom:16px; }
+.footer-contact-item:last-child{ margin-bottom:0; }
+.footer-contact-item b{ display:block; font-size:12px; color:var(--text-4); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px; }
+.footer-contact-item span,.footer-contact-item a{ display:block; font-size:14px; color:var(--text-3); text-decoration:none; line-height:1.6; }
+.footer-contact-item a:hover{ color:var(--text-1); }
+.footer-legal-copy{ padding-block:32px; display:flex; flex-direction:column; gap:14px; }
+.footer-legal-copy p{ font-size:13px; color:var(--text-4); line-height:1.7; max-width:900px; }
+.footer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  padding-block:24px;
+  border-top:1px solid var(--border);
+  font-size:13px;
+  color:var(--text-4);
+}
+.footer-bottom .legal-links{ display:flex; gap:16px; }
+.footer-bottom .legal-links button{ color:var(--text-4); text-decoration:underline; text-underline-offset:2px; }
+.footer-bottom .legal-links button:hover{ color:var(--text-2); }
+@media (max-width:900px){
+  .footer-grid{ grid-template-columns:1fr 1fr; }
+  .footer-brand-col{ grid-column:1 / -1; }
+}
+@media (max-width:560px){
+  .footer-grid{ grid-template-columns:1fr; }
+  .footer-bottom{ flex-direction:column; align-items:flex-start; }
+}
+
+/* ============================= LEGAL MODALS ============================= */
+.modal-scrim{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.7);
+  opacity:0; visibility:hidden;
+  transition:opacity .2s ease, visibility .2s ease;
+  z-index:200;
+}
+.modal-scrim.is-open{ opacity:1; visibility:visible; }
+.legal-modal{
+  position:fixed;
+  top:50%; left:50%;
+  transform:translate(-50%,-46%);
+  width:min(90vw,560px);
+  max-height:80vh;
+  overflow-y:auto;
+  background:#0a0a0a;
+  border:1px solid var(--border-strong);
+  border-radius:var(--r-lg);
+  padding:32px;
+  z-index:201;
+  opacity:0; visibility:hidden;
+  transition:opacity .2s ease, transform .2s ease, visibility .2s ease;
+}
+.legal-modal.is-open{ opacity:1; visibility:visible; transform:translate(-50%,-50%); }
+.legal-modal-head{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
+.legal-modal h3{ font-family:var(--font-display); font-weight:400; text-transform:uppercase; font-size:1.6rem; color:var(--text-1); }
+.legal-modal-close{
+  width:36px; height:36px;
+  border-radius:var(--r-sm);
+  border:1px solid var(--border-strong);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-1);
+  flex:none;
+}
+.legal-modal-close svg{ width:16px; height:16px; }
+.legal-modal p{ font-size:14.5px; color:var(--text-3); line-height:1.7; }
 </style>
 </head>
 <body>
@@ -1528,6 +1698,161 @@ h2.condensed{
   </div>
 </section>
 <!-- PHASE6_CONTACT_CTA_FOOTER -->
+<section class="section section-dark" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-copy">
+      <span class="eyebrow">Get In Touch</span>
+      <h2 class="condensed">Reach Out to Our Team Today</h2>
+      <p>Experiencing a roadside emergency or need professional vehicle towing? Our dedicated team is here to provide prompt, reliable assistance whenever you need it most. Don't hesitate to reach out - we're ready to help you get back on the road safely and quickly.</p>
+      <p>Whether it's an urgent breakdown, accident recovery, or scheduled transport, contact us today and experience the difference that professional, caring service makes. Your peace of mind is our priority.</p>
+      <div class="contact-rail">
+        <div class="contact-rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg><a href="tel:+639693486078">(0969) 348 6078</a></div>
+        <div class="contact-rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg><a href="tel:+639451080849">(0945) 108 0849</a></div>
+        <div class="contact-rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6.5 8 6 8-6"/></svg><a href="mailto:info@towfactory.com">info@towfactory.com</a></div>
+        <div class="contact-rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span>342 M. Ramoy compd. Quirino Hiway, Novaliches, Q.C. &middot; Ortigas Technopoint One, Pasig City &middot; Block B16 Lot 50, City of Imus</span></div>
+      </div>
+    </div>
+
+    <form class="contact-form" id="contact-form" novalidate>
+      <div class="form-row">
+        <div class="field" data-field="firstName">
+          <label for="cf-first">First Name</label>
+          <input id="cf-first" name="firstName" type="text" autocomplete="given-name" required>
+          <p class="field-error">Please enter your first name.</p>
+        </div>
+        <div class="field" data-field="lastName">
+          <label for="cf-last">Last Name</label>
+          <input id="cf-last" name="lastName" type="text" autocomplete="family-name" required>
+          <p class="field-error">Please enter your last name.</p>
+        </div>
+      </div>
+      <div class="field" data-field="email">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" autocomplete="email" required>
+        <p class="field-error">Please enter a valid email address.</p>
+      </div>
+      <div class="field" data-field="phone">
+        <label for="cf-phone">Phone Number</label>
+        <input id="cf-phone" name="phone" type="tel" autocomplete="tel" placeholder="09XX XXX XXXX" required>
+        <p class="field-error">Please enter a valid PH mobile number (e.g. 0969 348 6078).</p>
+      </div>
+      <div class="field" data-field="service">
+        <label for="cf-service">Service Needed</label>
+        <select id="cf-service" name="service">
+          <option value="">Select a service (optional)</option>
+          <option>Emergency towing</option>
+          <option>Vehicle recovery</option>
+          <option>Roadside assistance</option>
+          <option>Extended distance transport</option>
+          <option>Impound recovery</option>
+          <option>Vehicle tracking / other</option>
+        </select>
+      </div>
+      <div class="field" data-field="message">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" placeholder="Tell us your location and what happened..."></textarea>
+      </div>
+      <button class="btn btn-red btn-block" type="submit">Submit</button>
+      <p class="form-note">This is a design preview &mdash; submitting will not send a real message or dispatch a truck.</p>
+      <div class="form-success" id="contact-success" role="status" aria-live="polite" hidden></div>
+    </form>
+  </div>
+</section>
+
+<div class="final-cta-band">
+  <div class="container">
+    <span class="eyebrow">Need Help? Call</span>
+    <div class="hero-actions">
+      <a class="btn btn-red" href="tel:+639693486078">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>
+        (0969) 348 6078
+      </a>
+      <a class="btn btn-outline" href="tel:+639451080849">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>
+        (0945) 108 0849
+      </a>
+    </div>
+    <p class="scope-line">Manila, NLEX, SLEX, Luzon Provinces</p>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cta">
+      <h2 class="condensed">Get In Touch</h2>
+      <p>Reach out to our team today!</p>
+    </div>
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <img src="data:image/png;base64,{{LOGO_B64}}" alt="Tow Factory">
+        <p>Tow Factory Towing Services &mdash; affordable, reliable towing and vehicle recovery available 24/7 across the Philippines.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#top" data-nav>Home</a></li>
+          <li><a href="#about" data-nav>About</a></li>
+          <li><a href="#services" data-nav>Services</a></li>
+          <li><a href="#service-areas" data-nav>Branch Locator</a></li>
+          <li><a href="#contact" data-nav>Contact</a></li>
+          <li><button type="button" data-modal-open="privacy">Privacy Policy</button></li>
+          <li><button type="button" data-modal-open="terms">Terms &amp; Conditions</button></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact Us</h4>
+        <div class="footer-contact-item">
+          <b>Garage Address</b>
+          <span>1. 342 M. Ramoy compd. Quirino Hiway, Novaliches, Q.C.</span>
+          <span>2. Ortigas Technopoint One, 1 Do&ntilde;a Julia Vargas Ave., Pasig City</span>
+        </div>
+        <div class="footer-contact-item">
+          <b>Office Address</b>
+          <span>Block B16 Lot 50, Villa Hermosa, Buhay na Tubig, City of Imus</span>
+        </div>
+        <div class="footer-contact-item">
+          <b>Manila</b>
+          <a href="tel:+639693486078">(0969) 348 6078</a>
+          <a href="tel:+639451080849">(0945) 108 0849</a>
+        </div>
+        <div class="footer-contact-item">
+          <a href="mailto:info@towfactory.com">info@towfactory.com</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-legal-copy">
+      <p>Experiencing a vehicle breakdown or need professional towing assistance? We're here to help! Our experienced team provides round-the-clock support for all your towing needs. From emergency roadside situations to scheduled vehicle transport, we deliver reliable solutions with professionalism and care. Your vehicle's safety and your peace of mind matter most to us. Contact us today and experience the difference quality service makes!</p>
+      <p>We deliver exceptional towing and roadside assistance services, ensuring every vehicle receives expert care from pickup to final destination. Our commitment to excellence means your vehicle arrives safely, on time, and in perfect condition.</p>
+    </div>
+    <div class="footer-bottom">
+      <span>Copyright &copy; 2026 TOW FACTORY Towing Services. All rights reserved.</span>
+      <span class="legal-links">
+        <button type="button" data-modal-open="privacy">Privacy Policy</button>
+        <button type="button" data-modal-open="terms">Terms &amp; Conditions</button>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-scrim" data-modal-scrim></div>
+<div class="legal-modal" id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="modal-privacy-title">
+  <div class="legal-modal-head">
+    <h3 id="modal-privacy-title">Privacy Policy</h3>
+    <button class="legal-modal-close" type="button" data-modal-close aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <p>Tow Factory's Privacy Policy is being finalized with the client and will be published here once approved. This link is fully wired and ready for that content.</p>
+</div>
+<div class="legal-modal" id="modal-terms" role="dialog" aria-modal="true" aria-labelledby="modal-terms-title">
+  <div class="legal-modal-head">
+    <h3 id="modal-terms-title">Terms &amp; Conditions</h3>
+    <button class="legal-modal-close" type="button" data-modal-close aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <p>Tow Factory's Terms &amp; Conditions are being finalized with the client and will be published here once approved. This link is fully wired and ready for that content.</p>
+</div>
 </main>
 
 <script id="content-data" type="application/json">{{CONTENT_JSON}}</script>
