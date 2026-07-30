@@ -160,6 +160,15 @@ def main():
             if not val:
                 raise RuntimeError(f"selector not found: {selector}")
             clip = {"x": val["x"], "y": val["y"], "width": val["width"], "height": val["height"], "scale": 1}
+            # Element may sit beyond the emulated viewport height; grow the
+            # metrics override to cover it so captureBeyondViewport has real
+            # layout to read from (clip.y/height alone isn't enough).
+            need_h = int(val["y"] + val["height"]) + 50
+            if need_h > height:
+                cdp.call("Emulation.setDeviceMetricsOverride", {
+                    "width": width, "height": need_h, "deviceScaleFactor": 1, "mobile": False,
+                })
+                time.sleep(0.1)
         elif full:
             res = cdp.call("Runtime.evaluate", {
                 "expression": "({w:document.documentElement.scrollWidth,h:document.documentElement.scrollHeight})",
@@ -171,7 +180,7 @@ def main():
             })
             time.sleep(0.1)
 
-        shot_params = {"format": "png"}
+        shot_params = {"format": "png", "captureBeyondViewport": True}
         if clip:
             shot_params["clip"] = clip
         result = cdp.call("Page.captureScreenshot", shot_params, timeout=60)

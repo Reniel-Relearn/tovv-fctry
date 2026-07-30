@@ -109,6 +109,10 @@ h1,h2,h3,h4,p{ margin:0; }
   margin-inline:auto;
   padding-inline:var(--gutter);
 }
+[id]{ scroll-margin-top:calc(var(--header-h) + 24px); }
+@media (max-width:1024px){
+  [id]{ scroll-margin-top:calc(var(--header-h-mobile) + 20px); }
+}
 .visually-hidden{
   position:absolute !important;
   width:1px;height:1px;
@@ -731,6 +735,133 @@ h2.condensed{
 @media (max-width:600px){
   .commitment-panel{ padding:32px 22px; }
 }
+
+/* ============================= SERVICES ============================= */
+.service-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.service-card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:22px;
+  padding:28px 26px;
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  background:#050505;
+}
+.service-card-icon{
+  width:48px; height:48px;
+  border-radius:var(--r-md);
+  background:rgba(165,2,1,.12);
+  display:flex; align-items:center; justify-content:center;
+}
+.service-card-icon svg{ width:24px; height:24px; color:var(--red-accent); }
+.service-card h3{ font-size:18px; font-weight:700; color:var(--text-1); margin:16px 0 10px; }
+.service-card p{ font-size:14.5px; color:var(--text-3); line-height:1.65; }
+.service-card-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:14px;
+  font-weight:700;
+  color:var(--text-1);
+  text-decoration:none;
+  margin-top:4px;
+}
+.service-card-link svg{ width:15px; height:15px; transition:transform .15s ease; }
+.service-card-link:hover svg{ transform:translateX(3px); }
+@media (max-width:1023px){
+  .service-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:640px){
+  .service-grid{ grid-template-columns:1fr; }
+}
+
+.service-cta-band{
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:#030303;
+  padding-block:36px;
+  text-align:center;
+}
+.service-cta-band p{ font-size:17px; font-weight:600; color:var(--text-1); margin-bottom:18px; }
+.service-cta-band .hero-actions{ justify-content:center; margin-top:0; }
+
+/* ============================= SERVICE AREAS ============================= */
+.areas-grid{
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  gap:28px;
+  align-items:start;
+}
+.branch-panel{
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:32px;
+  background:#050505;
+}
+.branch-panel h3{ font-size:20px; font-weight:700; color:var(--text-1); margin-bottom:22px; }
+.branch-field{ margin-bottom:20px; }
+.branch-field:last-child{ margin-bottom:0; }
+.branch-field b{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  margin-bottom:8px;
+}
+.branch-field ul{ display:flex; flex-direction:column; gap:8px; }
+.branch-field li{ display:flex; align-items:flex-start; gap:8px; font-size:14.5px; color:var(--text-2); }
+.branch-field li a{ color:var(--text-2); text-decoration:none; }
+.branch-field li a:hover{ color:var(--text-1); text-decoration:underline; }
+.branch-field li svg{ width:15px; height:15px; flex:none; margin-top:3px; color:var(--text-4); }
+.branch-note{
+  margin-top:24px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  font-size:14px;
+  color:var(--text-3);
+  line-height:1.65;
+}
+.branch-note b{ color:var(--text-2); }
+
+.coverage-panel{
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:32px;
+}
+.coverage-panel h3{ font-size:20px; font-weight:700; color:var(--text-1); margin-bottom:8px; }
+.corridor-list{ display:flex; flex-direction:column; gap:2px; margin:20px 0; }
+.corridor-item{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+  font-size:14.5px;
+}
+.corridor-item b{ color:var(--text-1); font-weight:600; }
+.corridor-item span{ color:var(--text-3); text-align:right; }
+.city-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+.city-chips span{
+  padding:7px 13px;
+  border:1px solid var(--border-strong);
+  border-radius:var(--r-pill);
+  font-size:13px;
+  color:var(--text-2);
+}
+@media (max-width:900px){
+  .areas-grid{ grid-template-columns:1fr; }
+}
+@media (max-width:480px){
+  .corridor-item{ flex-direction:column; gap:2px; }
+  .corridor-item span{ text-align:left; }
+}
 </style>
 </head>
 <body>
@@ -990,6 +1121,127 @@ h2.condensed{
   </div>
 </section>
 <!-- PHASE4_SERVICES_AREAS -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">What We Do</span><h2 class="condensed">Comprehensive Towing Solutions</h2></div>
+      <p>Professional towing and recovery services tailored to meet all your vehicle transport needs across Metro Manila and beyond.</p>
+    </div>
+    <div class="service-grid">
+      <article class="service-card" id="svc-emergency-response">
+        <div>
+          <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 4 22 20H2L12 4Z"/><path d="M12 10.5v4M12 17.2h.01"/></svg></div>
+          <h3>Emergency Response Team</h3>
+          <p>Our rapid response team is available every hour of every day. When emergencies strike, we're ready to assist immediately with professional equipment and trained personnel.</p>
+        </div>
+        <a class="service-card-link" href="tel:+639693486078">Call for this service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <article class="service-card" id="svc-complete-vehicle-recovery">
+        <div>
+          <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 16.5 5.6 11a2 2 0 0 1 1.9-1.4h9a2 2 0 0 1 1.9 1.4L20 16.5"/><path d="M3 16.5h18v2.3a1 1 0 0 1-1 1h-1.2a1 1 0 0 1-1-1v-.8H6.2v.8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.3Z"/></svg></div>
+          <h3>Complete Vehicle Recovery</h3>
+          <p>Expert recovery services for all vehicle types - from compact cars to heavy-duty trucks, motorcycles to watercraft, and specialized commercial equipment.</p>
+        </div>
+        <a class="service-card-link" href="#contact" data-scroll-quote>Request assistance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <article class="service-card" id="svc-roadside-help">
+        <div>
+          <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5l3 3 5.8-5.8a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2 2.6-2.6Z"/></svg></div>
+          <h3>Comprehensive Roadside Help</h3>
+          <p>Full-service roadside support including dead battery assistance, flat tire replacement, emergency fuel supply, and lockout services to get you moving again.</p>
+        </div>
+        <a class="service-card-link" href="#contact" data-scroll-quote>Choose roadside help <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <article class="service-card" id="svc-extended-distance-transport">
+        <div>
+          <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="17" r="2.2"/><path d="M6 9.2V12a4 4 0 0 0 4 4h4"/></svg></div>
+          <h3>Extended Distance Transport</h3>
+          <p>Long-haul towing capabilities covering Metro Manila, major expressways (NLEX, SLEX), and provinces throughout Luzon with reliable, safe transport.</p>
+        </div>
+        <a class="service-card-link" href="#contact" data-scroll-quote>Get a transport quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <article class="service-card" id="svc-impound-lot-services">
+        <div>
+          <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 21V8l8-4.5L20 8v13"/><path d="M9.5 21v-5.5h5V21"/></svg></div>
+          <h3>Impound Lot Services</h3>
+          <p>Specialized recovery from impound facilities with proper documentation handling and secure transport to your chosen location.</p>
+        </div>
+        <a class="service-card-link" href="#contact" data-scroll-quote>Start an impound request <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <article class="service-card" id="svc-advanced-tracking">
+        <div>
+          <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="2.6"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21"/></svg></div>
+          <h3>Advanced Tracking System</h3>
+          <p>State-of-the-art GPS monitoring on all vehicles provides real-time location updates and ensures maximum security during transport operations.</p>
+        </div>
+        <a class="service-card-link" href="#contact" data-scroll-quote>Check vehicle support <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="service-cta-band">
+  <div class="container">
+    <p>Ready to help you right now &mdash; call our emergency hotline!</p>
+    <div class="hero-actions">
+      <a class="btn btn-red" href="tel:+639693486078">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>
+        (0969) 348 6078
+      </a>
+      <a class="btn btn-outline" href="tel:+639451080849">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>
+        (0945) 108 0849
+      </a>
+    </div>
+  </div>
+</div>
+
+<section class="section section-dark" id="service-areas">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">Where We Operate</span><h2 class="condensed">Service Locations</h2></div>
+      <p>Connect with our team at strategic locations throughout the Philippines, ready to serve your towing needs.</p>
+    </div>
+    <div class="areas-grid">
+      <div class="branch-panel">
+        <h3>Manila Branch</h3>
+        <div class="branch-field">
+          <b>Garage Address</b>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><a href="https://www.google.com/maps/search/?api=1&amp;query=342%20M.%20Ramoy%20Compound%2C%20Quirino%20Highway%2C%20Novaliches%2C%20Quezon%20City%2C%20Philippines" target="_blank" rel="noopener">342 M. Ramoy compd. Quirino Hiway, Novaliches, Q.C.</a></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><a href="https://www.google.com/maps/search/?api=1&amp;query=Ortigas%20Technopoint%20One%2C%201%20Do%C3%B1a%20Julia%20Vargas%20Avenue%2C%20Pasig%20City%2C%20Philippines" target="_blank" rel="noopener">Ortigas Technopoint One, 1 Do&ntilde;a Julia Vargas Ave., Pasig City</a></li>
+          </ul>
+        </div>
+        <div class="branch-field">
+          <b>Office Address</b>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><a href="https://www.google.com/maps/search/?api=1&amp;query=Block%20B16%20Lot%2050%2C%20Villa%20Hermosa%2C%20Buhay%20na%20Tubig%2C%20City%20of%20Imus%2C%20Cavite%2C%20Philippines" target="_blank" rel="noopener">Block B16 Lot 50, Villa Hermosa, Buhay na Tubig, City of Imus</a></li>
+          </ul>
+        </div>
+        <div class="branch-field">
+          <b>Phone</b>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg><a href="tel:+639693486078">(0969) 348 6078</a></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg><a href="tel:+639451080849">(0945) 108 0849</a></li>
+          </ul>
+        </div>
+        <p class="branch-note"><b>Continuous Operations:</b> Every location maintains full operational capacity around the clock, ensuring assistance is available whenever emergencies arise, regardless of time or day.</p>
+      </div>
+      <div class="coverage-panel">
+        <h3>Coverage Network</h3>
+        <div class="corridor-list">
+          <div class="corridor-item"><b>Metro Manila</b><span>Primary urban service coverage</span></div>
+          <div class="corridor-item"><b>NLEX Corridor</b><span>Northbound vehicle recovery</span></div>
+          <div class="corridor-item"><b>SLEX Corridor</b><span>Southbound vehicle recovery</span></div>
+          <div class="corridor-item"><b>Luzon Provinces</b><span>Availability confirmed before dispatch</span></div>
+        </div>
+        <div class="city-chips" aria-label="Named service areas">
+          <span>Quezon City</span><span>Makati</span><span>Taguig</span><span>Marikina</span><span>Pasig</span><span>Pasay</span><span>Para&ntilde;aque</span><span>Muntinlupa</span><span>Valenzuela</span><span>San Juan</span><span>Alabang</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 <!-- PHASE5_ABOUT_BRANDS_REVIEWS_FAQ -->
 <!-- PHASE6_CONTACT_CTA_FOOTER -->
 </main>
