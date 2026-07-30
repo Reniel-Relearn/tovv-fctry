@@ -406,6 +406,129 @@ h1,h2,h3,h4,p{ margin:0; }
 }
 
 body.drawer-locked{ overflow:hidden; }
+
+/* ============================= HERO ============================= */
+.hero{
+  position:relative;
+  background:#000;
+  overflow:hidden;
+  padding-bottom:56px;
+}
+.hero-art{
+  position:absolute;
+  top:0;
+  right:0;
+  width:66.75%;
+  height:auto;
+  display:block;
+  mix-blend-mode:screen;
+  pointer-events:none;
+  user-select:none;
+}
+.hero-inner{
+  position:relative;
+  padding-top:44px;
+  z-index:1;
+}
+.hero-copy{ max-width:600px; }
+.hero-copy h1{
+  font-family:var(--font-display);
+  font-weight:400;
+  text-transform:uppercase;
+  color:var(--text-1);
+  font-size:clamp(2.75rem, 5.4vw, 5.625rem);
+  line-height:1.06;
+  letter-spacing:.002em;
+}
+.hero-copy h1 .accent{ color:var(--red-accent); }
+.hero-copy p{
+  margin-top:22px;
+  font-size:16.5px;
+  line-height:1.6;
+  color:var(--text-2);
+  max-width:460px;
+}
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:30px;
+}
+.hero-actions-secondary{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:14px;
+}
+
+.hero-cards{
+  position:absolute;
+  top:186px;
+  left:0;
+  width:100%;
+  z-index:2;
+  pointer-events:none;
+}
+.hero-card{
+  position:absolute;
+  top:0;
+  width:249px;
+  min-height:144px;
+  padding:20px 22px;
+  border:1px solid var(--border-strong);
+  border-radius:var(--r-lg);
+  background:#050505;
+  pointer-events:auto;
+}
+.hero-card.card-dispatch{ left:43.4%; }
+.hero-card.card-coverage{ left:59.4%; width:277px; }
+.hero-card .hc-head{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-bottom:14px;
+}
+.hero-card .hc-head svg{ width:17px; height:17px; flex:none; color:var(--text-3); }
+.hero-card .hc-eyebrow{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.hero-card .hc-value{
+  font-size:19px;
+  font-weight:700;
+  color:var(--text-1);
+  margin-bottom:5px;
+}
+.hero-card .hc-sub{ font-size:13.5px; color:var(--text-3); }
+
+@media (max-width:1279px){
+  .hero-cards{ display:none; }
+}
+@media (max-width:1023px){
+  .hero{ padding-bottom:36px; }
+  .hero-art{
+    position:relative;
+    width:100%;
+    right:auto;
+    aspect-ratio:1116/663;
+    object-fit:cover;
+    opacity:1;
+    margin-top:28px;
+    border-radius:var(--r-lg);
+    mask-image:linear-gradient(180deg,#000 60%,rgba(0,0,0,.55));
+    -webkit-mask-image:linear-gradient(180deg,#000 60%,rgba(0,0,0,.55));
+  }
+  .hero-inner{ padding-top:32px; }
+  .hero-copy{ max-width:none; }
+  .hero-copy p{ max-width:560px; }
+}
+@media (max-width:640px){
+  .hero-actions,.hero-actions-secondary{ flex-direction:column; }
+  .hero-actions .btn,.hero-actions-secondary .btn{ width:100%; }
+}
 </style>
 </head>
 <body>
@@ -508,6 +631,48 @@ body.drawer-locked{ overflow:hidden; }
 
 <main id="main">
 <!-- PHASE2_HERO -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <h1>Affordable.<br>Reliable.<br><span class="accent">Ready 24/7.</span></h1>
+      <p>Professional towing, roadside assistance, and vehicle recovery &mdash; anywhere you are. All over the Philippines.</p>
+      <div class="hero-actions">
+        <a class="btn btn-red" href="tel:+639693486078">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0 8.3 6.7 15 15 15l3-4-6-3-2 2c-2.5-1.2-4.8-3.5-6-6l2-2-3-6-4 3Z"/></svg>
+          Call for Immediate Assistance
+        </a>
+      </div>
+      <div class="hero-actions-secondary">
+        <button class="btn btn-outline" type="button" data-send-location>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Send Your Location
+        </button>
+        <a class="btn btn-outline" href="#contact" data-scroll-quote>Request a Quote</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-cards" aria-hidden="true">
+    <div class="hero-card card-dispatch">
+      <div class="hc-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8"><circle cx="12" cy="12" r="9"/></svg>
+        <span class="hc-eyebrow">Dispatch Status</span>
+      </div>
+      <div class="hc-value">Available 24/7</div>
+      <div class="hc-sub">Our team is standing by.</div>
+    </div>
+    <div class="hero-card card-coverage">
+      <div class="hc-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3Z"/></svg>
+        <span class="hc-eyebrow">Coverage</span>
+      </div>
+      <div class="hc-value">All Over the Philippines</div>
+      <div class="hc-sub">Nationwide Coverage.</div>
+    </div>
+  </div>
+
+  <img class="hero-art" src="data:image/webp;base64,{{HERO_ART_B64}}" alt="Tow Factory flatbed tow truck carrying a vehicle, with a lit-up map of the Philippines representing nationwide coverage" width="1116" height="663">
+</section>
 <!-- PHASE3_SIGNAL_POSITIONING_PILLARS -->
 <!-- PHASE4_SERVICES_AREAS -->
 <!-- PHASE5_ABOUT_BRANDS_REVIEWS_FAQ -->
