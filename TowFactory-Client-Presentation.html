@@ -468,7 +468,9 @@ body.drawer-locked{ overflow:hidden; }
 
 .hero-cards{
   position:absolute;
-  top:186px;
+  top:11.126vw; /* 186px at the 1672px reference width -- vw-based (not px)
+    so the cards track the hero-art image's fluid vw-based scaling and stay
+    aligned with the truck at every viewport width, not just 1672px */
   left:0;
   width:100%;
   z-index:2;
@@ -477,16 +479,17 @@ body.drawer-locked{ overflow:hidden; }
 .hero-card{
   position:absolute;
   top:0;
-  width:249px;
-  min-height:144px;
-  padding:20px 22px;
+  width:14.892vw; /* 249px at 1672px reference */
+  min-width:190px;
+  min-height:8.612vw; /* 144px at 1672px reference */
+  padding:1.196vw 1.316vw; /* 20px 22px at 1672px reference */
   border:1px solid var(--border-strong);
   border-radius:var(--r-lg);
   background:#050505;
   pointer-events:auto;
 }
 .hero-card.card-dispatch{ left:43.4%; }
-.hero-card.card-coverage{ left:59.4%; width:277px; }
+.hero-card.card-coverage{ left:59.4%; width:16.567vw; min-width:212px; }
 .hero-card .hc-head{
   display:flex;
   align-items:center;
