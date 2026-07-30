@@ -529,6 +529,208 @@ body.drawer-locked{ overflow:hidden; }
   .hero-actions,.hero-actions-secondary{ flex-direction:column; }
   .hero-actions .btn,.hero-actions-secondary .btn{ width:100%; }
 }
+
+/* ============================= SECTION UTILITIES ============================= */
+.section{ padding-block:88px; }
+.section-dark{ background:#030303; }
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:32px;
+  margin-bottom:48px;
+}
+.section-head p{ color:var(--text-2); font-size:16px; max-width:520px; }
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--red-accent);
+  margin-bottom:14px;
+}
+h2.condensed{
+  font-family:var(--font-display);
+  font-weight:400;
+  text-transform:uppercase;
+  color:var(--text-1);
+  font-size:clamp(1.9rem, 3vw, 2.75rem);
+  line-height:1.08;
+  letter-spacing:.002em;
+}
+@media (max-width:800px){
+  .section{ padding-block:64px; }
+  .section-head{ flex-direction:column; align-items:flex-start; gap:14px; }
+}
+
+/* ============================= SIGNAL STRIP ============================= */
+.signal-strip{
+  background:#030303;
+  border-block:1px solid var(--border);
+}
+.signal-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+}
+.signal-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:26px 18px;
+  border-left:1px solid var(--border);
+}
+.signal-item:first-child{ border-left:0; padding-left:0; }
+.signal-item svg{ width:26px; height:26px; flex:none; color:var(--red-accent); }
+.signal-item span{ display:block; font-size:14.5px; font-weight:600; color:var(--text-1); line-height:1.35; }
+@media (max-width:1023px){
+  .signal-grid{ grid-template-columns:repeat(3,1fr); }
+  .signal-item{ padding:20px 14px; border-left:0; border-top:1px solid var(--border); }
+  .signal-item:nth-child(-n+3){ border-top:0; }
+}
+@media (max-width:600px){
+  .signal-grid{ grid-template-columns:repeat(2,1fr); }
+  .signal-item:nth-child(-n+3){ border-top:1px solid var(--border); }
+  .signal-item:nth-child(-n+2){ border-top:0; }
+}
+
+/* ============================= POSITIONING BAND ============================= */
+.positioning-grid{
+  display:grid;
+  grid-template-columns:0.92fr 1fr;
+  gap:64px;
+  align-items:center;
+}
+.positioning-media{
+  position:relative;
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  aspect-ratio:6/5;
+}
+.positioning-media img{ width:100%; height:100%; object-fit:cover; }
+.positioning-media::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.85));
+}
+.positioning-copy h2{ margin-bottom:16px; }
+.positioning-lead{
+  font-size:18px;
+  font-weight:600;
+  color:var(--text-1);
+  margin-bottom:18px;
+}
+.positioning-copy p{ color:var(--text-2); font-size:15.5px; line-height:1.7; margin-bottom:16px; }
+.promise-inline-list{ margin:22px 0; display:flex; flex-direction:column; gap:12px; }
+.promise-inline-list li{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  font-size:15px;
+  color:var(--text-1);
+  font-weight:500;
+}
+.promise-inline-list svg{ width:19px; height:19px; flex:none; margin-top:1px; color:var(--green); }
+.rating-line{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-size:14.5px;
+  color:var(--text-2);
+  font-weight:600;
+}
+.rating-stars{ color:#f4b63d; letter-spacing:.12em; font-size:15px; }
+@media (max-width:900px){
+  .positioning-grid{ grid-template-columns:1fr; gap:36px; }
+  .positioning-media{ aspect-ratio:16/9; order:-1; }
+}
+
+/* ============================= PILLARS ============================= */
+.pillar-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+}
+.pillar{
+  background:#050505;
+  padding:32px 26px;
+}
+.pillar-icon{
+  width:52px; height:52px;
+  border-radius:50%;
+  border:1.5px solid var(--red-500);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:20px;
+}
+.pillar-icon svg{ width:22px; height:22px; color:var(--red-accent); }
+.pillar h3{
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.01em;
+  text-transform:uppercase;
+  color:var(--text-1);
+  margin-bottom:10px;
+  line-height:1.3;
+}
+.pillar p{ font-size:14px; color:var(--text-3); line-height:1.65; }
+@media (max-width:900px){
+  .pillar-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:560px){
+  .pillar-grid{ grid-template-columns:1fr; }
+}
+
+/* ============================= PROMISE CARDS ============================= */
+.promise-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.promise-card{
+  padding:30px 28px;
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  background:linear-gradient(180deg,#0b0b0b,#050505);
+}
+.promise-card-icon{
+  width:44px; height:44px;
+  border-radius:var(--r-md);
+  background:rgba(165,2,1,.12);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:18px;
+}
+.promise-card-icon svg{ width:22px; height:22px; color:var(--red-accent); }
+.promise-card h3{ font-size:18px; font-weight:700; color:var(--text-1); margin-bottom:10px; }
+.promise-card p{ font-size:14.5px; color:var(--text-3); line-height:1.7; }
+@media (max-width:900px){
+  .promise-grid{ grid-template-columns:1fr; }
+}
+
+/* ============================= COMMITMENT ============================= */
+.commitment-panel{
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:48px;
+  text-align:center;
+  background:#030303;
+}
+.commitment-panel h2{ margin-bottom:20px; }
+.commitment-panel p{
+  max-width:760px;
+  margin-inline:auto;
+  color:var(--text-2);
+  font-size:16.5px;
+  line-height:1.75;
+}
+@media (max-width:600px){
+  .commitment-panel{ padding:32px 22px; }
+}
 </style>
 </head>
 <body>
@@ -674,6 +876,119 @@ body.drawer-locked{ overflow:hidden; }
   <img class="hero-art" src="data:image/webp;base64,{{HERO_ART_B64}}" alt="Tow Factory flatbed tow truck carrying a vehicle, with a lit-up map of the Philippines representing nationwide coverage" width="1116" height="663">
 </section>
 <!-- PHASE3_SIGNAL_POSITIONING_PILLARS -->
+<section class="signal-strip" aria-label="Tow Factory service highlights">
+  <div class="container signal-grid">
+    <div class="signal-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+      <span>24/7<br>Assistance</span>
+    </div>
+    <div class="signal-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12 12 20l-8-8V4h8l8 8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>
+      <span>Transparent<br>Pricing</span>
+    </div>
+    <div class="signal-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 16h2M4.5 16V7.5h8.5l2.7 3.7H18a2 2 0 0 1 2 2V16h-1.5"/><circle cx="8" cy="17.2" r="1.9"/><circle cx="16.5" cy="17.2" r="1.9"/></svg>
+      <span>Vehicle<br>Recovery</span>
+    </div>
+    <div class="signal-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>
+      <span>Fast<br>Response</span>
+    </div>
+    <div class="signal-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3Z"/></svg>
+      <span>Safe &amp; Secure<br>Towing</span>
+    </div>
+    <div class="signal-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M2 20c0-3 2.5-5 6-5s6 2 6 5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M15.3 20c0-2.2 1.6-4 4.2-4"/></svg>
+      <span>Experienced<br>Professionals</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="positioning">
+  <div class="container positioning-grid">
+    <div class="positioning-media">
+      <img src="data:image/webp;base64,{{TRUCK_1200_B64}}" alt="Tow Factory flatbed tow truck carrying a vehicle on the highway" loading="lazy">
+    </div>
+    <div class="positioning-copy">
+      <span class="eyebrow">Professional Vehicle Recovery Services Ready Now!</span>
+      <h2 class="condensed">Your Trusted Partner in Vehicle Recovery</h2>
+      <p class="positioning-lead">Professional, Efficient, &amp; Dependable</p>
+      <p>Serving all major areas including Quezon City, Makati, Taguig, Marikina, Pasig, Pasay, Para&ntilde;aque, Muntinlupa, Valenzuela, San Juan, Alabang, plus SLEX and NLEX corridors.</p>
+      <p>Specialized towing solutions for passenger vehicles, commercial trucks, motorcycles, boats, and heavy equipment. Available around the clock for emergency response and scheduled transport services.</p>
+      <ul class="promise-inline-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12l4 4 10-10"/></svg> Round-the-Clock Assistance Whenever You Need It!</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12l4 4 10-10"/></svg> Trusted Vehicle Transport Solutions.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12l4 4 10-10"/></svg> Quick Response, Fair Pricing, &amp; Dependable Service!</li>
+      </ul>
+      <div class="rating-line"><span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Top-rated by over 100 satisfied clients</div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">Why Tow Factory</span><h2 class="condensed">Exceptional Service, Every Time</h2></div>
+    </div>
+    <div class="pillar-grid">
+      <article class="pillar">
+        <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="3"/><path d="M2 20c0-3 2.5-5 6-5s6 2 6 5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M15.3 20c0-2.2 1.6-4 4.2-4"/></svg></div>
+        <h3>Exceptional Service Excellence</h3>
+        <p>Our commitment to excellence sets us apart. Every interaction is handled with care and professionalism, ensuring a smooth and worry-free experience.</p>
+      </article>
+      <article class="pillar">
+        <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg></div>
+        <h3>Always There When You Need Us</h3>
+        <p>Our fleet operates 24/7 throughout the year. We provide live tracking updates and advanced GPS technology to keep your vehicle secure during transport.</p>
+      </article>
+      <article class="pillar">
+        <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12 12 20l-8-8V4h8l8 8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg></div>
+        <h3>Fair &amp; Transparent Pricing</h3>
+        <p>No hidden costs or surprises. We offer honest, upfront pricing with competitive rates for professional-grade service without premium markups.</p>
+      </article>
+      <article class="pillar">
+        <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3Z"/></svg></div>
+        <h3>Complete Protection Coverage</h3>
+        <p>Every vehicle in our care is protected by comprehensive insurance coverage, giving you complete peace of mind and industry-leading protection.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">Our Promise</span><h2 class="condensed">What Sets Us Apart</h2></div>
+    </div>
+    <div class="promise-grid">
+      <article class="promise-card">
+        <div class="promise-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 16h2M4.5 16V7.5h8.5l2.7 3.7H18a2 2 0 0 1 2 2V16h-1.5"/><circle cx="8" cy="17.2" r="1.9"/><circle cx="16.5" cy="17.2" r="1.9"/></svg></div>
+        <h3>Premium Customer Service</h3>
+        <p>We're proud to be your top choice for reliable towing services. From your first call to safe vehicle delivery, we prioritize your satisfaction. Our friendly team ensures a stress-free towing experience.</p>
+      </article>
+      <article class="promise-card">
+        <div class="promise-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Reliable Redefined</h3>
+        <p>Count on us for quick, round-the-clock assistance, 365 days a year. We maintain constant communication and real-time updates on your vehicle's location. With GPS-monitored trucks, your vehicle's safety is assured at all times.</p>
+      </article>
+      <article class="promise-card">
+        <div class="promise-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12 12 20l-8-8V4h8l8 8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg></div>
+        <h3>Affordable</h3>
+        <p>We provide top-notch towing assistance at competitive prices without hidden fees. Our transparent pricing guarantees you know exactly what you're paying for upfront. Enjoy premium quality service without breaking the bank.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="container">
+    <div class="commitment-panel">
+      <h2 class="condensed">Our Commitment</h2>
+      <p>When you choose TOW FACTORY, you're choosing more than a service provider &ndash; you're choosing a trusted partner committed to your peace of mind. We combine technical expertise with genuine care, ensuring every vehicle is handled with the respect and attention it deserves. Your satisfaction and safety drive everything we do.</p>
+    </div>
+  </div>
+</section>
 <!-- PHASE4_SERVICES_AREAS -->
 <!-- PHASE5_ABOUT_BRANDS_REVIEWS_FAQ -->
 <!-- PHASE6_CONTACT_CTA_FOOTER -->
