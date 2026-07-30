@@ -862,6 +862,186 @@ h2.condensed{
   .corridor-item{ flex-direction:column; gap:2px; }
   .corridor-item span{ text-align:left; }
 }
+
+/* ============================= ABOUT ============================= */
+.about-section{ position:relative; overflow:hidden; }
+.about-watermark{
+  position:absolute;
+  top:50%; right:-6%;
+  transform:translateY(-50%);
+  width:46%;
+  max-width:560px;
+  opacity:.05;
+  pointer-events:none;
+  filter:grayscale(1) brightness(3);
+}
+.about-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:56px;
+  align-items:center;
+}
+.about-main h2{ margin-bottom:18px; }
+.about-main p{ font-size:16px; color:var(--text-2); line-height:1.75; max-width:520px; margin-bottom:26px; }
+.mission-stack{ display:flex; flex-direction:column; gap:18px; }
+.mission-card{
+  border:1px solid var(--border);
+  border-left:3px solid var(--red-500);
+  border-radius:var(--r-md);
+  padding:24px 26px;
+  background:#050505;
+}
+.mission-card small{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--red-accent);
+  margin-bottom:10px;
+}
+.mission-card p{ font-size:15px; color:var(--text-1); line-height:1.65; }
+@media (max-width:900px){
+  .about-grid{ grid-template-columns:1fr; gap:32px; }
+  .about-watermark{ display:none; }
+}
+
+/* ============================= BRANDS MARQUEE ============================= */
+.brands-section{ padding-block:56px; }
+.marquee-label{
+  text-align:center;
+  font-size:12.5px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  margin-bottom:28px;
+}
+.marquee{
+  overflow:hidden;
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+}
+.marquee-track{
+  display:flex;
+  align-items:center;
+  gap:64px;
+  width:max-content;
+  animation:marquee-scroll 22s linear infinite;
+}
+.marquee:hover .marquee-track{ animation-play-state:paused; }
+.brand-chip{
+  font-family:var(--font-display);
+  font-weight:400;
+  font-size:26px;
+  letter-spacing:.03em;
+  color:var(--text-3);
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+@keyframes marquee-scroll{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}
+@media (prefers-reduced-motion:reduce){
+  .marquee-track{ animation:none; overflow-x:auto; }
+}
+
+/* ============================= REVIEWS ============================= */
+.review-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.review-card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:18px;
+  min-height:210px;
+  padding:24px 26px;
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  background:linear-gradient(180deg,#0b0b0b,#050505);
+}
+.review-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.review-stars{ color:#f4b63d; letter-spacing:.12em; font-size:14px; }
+.review-card blockquote{ margin:0; font-size:14.5px; color:var(--text-2); line-height:1.65; }
+.review-person{ display:flex; align-items:center; gap:12px; }
+.review-avatar{
+  width:38px; height:38px;
+  border-radius:50%;
+  background:rgba(165,2,1,.16);
+  color:var(--red-accent);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700;
+  flex:none;
+}
+.review-person b{ display:block; font-size:14px; color:var(--text-1); }
+.review-person small{ font-size:12.5px; color:var(--text-3); }
+@media (max-width:1023px){
+  .review-grid{
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    gap:14px;
+    margin:0 calc(var(--gutter) * -1);
+    padding:4px var(--gutter) 12px;
+    scrollbar-width:none;
+  }
+  .review-grid::-webkit-scrollbar{ display:none; }
+  .review-card{ flex:0 0 82%; scroll-snap-align:start; min-height:auto; }
+}
+@media (max-width:560px){
+  .review-card{ flex-basis:88%; }
+}
+
+/* ============================= FAQ ============================= */
+.faq-list{ display:flex; flex-direction:column; gap:12px; max-width:780px; }
+.faq-item{
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  background:#050505;
+  overflow:hidden;
+}
+.faq-q{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  width:100%;
+  padding:18px 22px;
+  text-align:left;
+  font-size:15.5px;
+  font-weight:600;
+  color:var(--text-1);
+}
+.faq-q .faq-plus{
+  flex:none;
+  width:22px; height:22px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--red-accent);
+  transition:transform .18s ease;
+}
+.faq-item[data-open="true"] .faq-plus{ transform:rotate(45deg); }
+.faq-a{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .22s ease;
+}
+.faq-a-inner{ padding:0 22px 20px; font-size:14.5px; color:var(--text-3); line-height:1.65; }
+.faq-pending{
+  max-width:780px;
+  border:1px dashed var(--border-strong);
+  border-radius:var(--r-lg);
+  padding:26px 28px;
+  color:var(--text-3);
+  font-size:14.5px;
+  line-height:1.7;
+}
+.faq-pending b{ color:var(--text-2); }
 </style>
 </head>
 <body>
@@ -1243,6 +1423,110 @@ h2.condensed{
   </div>
 </section>
 <!-- PHASE5_ABOUT_BRANDS_REVIEWS_FAQ -->
+<section class="section about-section" id="about">
+  <img class="about-watermark" src="data:image/png;base64,{{LOGO_B64}}" alt="" aria-hidden="true">
+  <div class="container about-grid">
+    <div class="about-main">
+      <span class="eyebrow">About Tow Factory</span>
+      <h2 class="condensed">A Trusted Partner in Vehicle Recovery</h2>
+      <p>Tow Factory provides towing, roadside assistance, and scheduled transport for passenger vehicles, motorcycles, commercial trucks, boats, and heavy equipment.</p>
+      <div class="hero-actions">
+        <a class="btn btn-outline" href="mailto:info@towfactory.com">Email Tow Factory</a>
+        <a class="btn btn-outline" href="#service-areas" data-nav>View Service Areas</a>
+      </div>
+    </div>
+    <div class="mission-stack">
+      <article class="mission-card">
+        <small>Vision</small>
+        <p>TOW FACTORY Towing Services is the Top of Mind Choice and the #1 Towing Services in the Philippines.</p>
+      </article>
+      <article class="mission-card">
+        <small>Mission</small>
+        <p>TOW FACTORY Towing Services Brings Reliable, Safe and Efficient Transfer of Vehicles from Pick-up to Destination.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="brands-section section-dark">
+  <p class="marquee-label">Vehicle Brands We Handle</p>
+  <div class="marquee">
+    <div class="marquee-track">
+      <span class="brand-chip">Honda</span>
+      <span class="brand-chip">Hyundai</span>
+      <span class="brand-chip">BMW</span>
+      <span class="brand-chip">Rapide</span>
+      <span class="brand-chip">Toyota</span>
+      <span class="brand-chip">Honda</span>
+      <span class="brand-chip">Hyundai</span>
+      <span class="brand-chip">BMW</span>
+      <span class="brand-chip">Rapide</span>
+      <span class="brand-chip">Toyota</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="reviews">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">What Drivers Say</span><h2 class="condensed">What Our Clients Say</h2></div>
+      <p>Real experiences from customers who trust us with their vehicle recovery needs.</p>
+    </div>
+    <div class="review-grid">
+      <article class="review-card">
+        <div>
+          <div class="review-top"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+          <blockquote>&ldquo;Outstanding service from start to finish! The team was professional, arrived on time, and handled my car with such care. The pricing was fair and transparent. Will definitely use TOW FACTORY again if needed. Highly recommended!&rdquo;</blockquote>
+        </div>
+        <div class="review-person"><span class="review-avatar">SM</span><span><b>Sarah Martinez</b><small>January 15, 2025</small></span></div>
+      </article>
+      <article class="review-card">
+        <div>
+          <div class="review-top"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+          <blockquote>&ldquo;Quick response time and excellent communication throughout. The driver was courteous and knowledgeable. Made a stressful situation much easier to handle. Five stars!&rdquo;</blockquote>
+        </div>
+        <div class="review-person"><span class="review-avatar">MC</span><span><b>Michael Chen</b><small>3 weeks ago</small></span></div>
+      </article>
+      <article class="review-card">
+        <div>
+          <div class="review-top"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+          <blockquote>&ldquo;I was stranded late at night and they came to my rescue within 30 minutes. The service was professional, the rates were reasonable, and they even helped me with some paperwork. Truly grateful for their help!&rdquo;</blockquote>
+        </div>
+        <div class="review-person"><span class="review-avatar">JL</span><span><b>Jennifer Lopez</b><small>1 month ago</small></span></div>
+      </article>
+      <article class="review-card">
+        <div>
+          <div class="review-top"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+          <blockquote>&ldquo;Used their service for my business vehicle. Fast, reliable, and very accommodating. The team understood my urgent situation and delivered exactly as promised. Great value for money.&rdquo;</blockquote>
+        </div>
+        <div class="review-person"><span class="review-avatar">RS</span><span><b>Robert Santos</b><small>2 months ago</small></span></div>
+      </article>
+      <article class="review-card">
+        <div>
+          <div class="review-top"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+          <blockquote>&ldquo;What impressed me most was their flexibility with payment options. When I had limited cash access, they worked with me to find a solution. The staff was understanding and professional throughout the entire process.&rdquo;</blockquote>
+        </div>
+        <div class="review-person"><span class="review-avatar">MG</span><span><b>Maria Garcia</b><small>6 weeks ago</small></span></div>
+      </article>
+      <article class="review-card">
+        <div>
+          <div class="review-top"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+          <blockquote>&ldquo;Professional service from the moment I called. They kept me updated on arrival time and handled everything efficiently. My vehicle arrived safely at the destination. Would use their services again without hesitation.&rdquo;</blockquote>
+        </div>
+        <div class="review-person"><span class="review-avatar">DK</span><span><b>David Kim</b><small>December 20, 2024</small></span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="eyebrow">Frequently Asked Questions</span><h2 class="condensed">Answers Before You Call</h2></div>
+    </div>
+    <p class="faq-pending"><b>FAQ content is being finalized with the client.</b> This section is wired and ready &mdash; questions and answers will be added here in the next pass, sourced only from confirmed Tow Factory information.</p>
+  </div>
+</section>
 <!-- PHASE6_CONTACT_CTA_FOOTER -->
 </main>
 
