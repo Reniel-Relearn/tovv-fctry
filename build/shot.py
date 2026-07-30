@@ -180,9 +180,16 @@ def main():
             })
             time.sleep(0.1)
 
-        shot_params = {"format": "png", "captureBeyondViewport": True}
+        shot_params = {"format": "png"}
         if clip:
             shot_params["clip"] = clip
+            shot_params["captureBeyondViewport"] = True
+        elif full:
+            shot_params["captureBeyondViewport"] = True
+            shot_params["clip"] = {"x": 0, "y": 0, "width": width, "height": max(val["h"], height), "scale": 1}
+        # Plain viewport screenshot (no selector, no --full): omit
+        # captureBeyondViewport entirely -- passing it true with no clip
+        # captures the whole scrollable document instead of the viewport.
         result = cdp.call("Page.captureScreenshot", shot_params, timeout=60)
         data = base64.b64decode(result["data"])
         os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)

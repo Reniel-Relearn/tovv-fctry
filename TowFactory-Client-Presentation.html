@@ -75,6 +75,7 @@ h1,h2,h3,h4,p{ margin:0; }
   --red-600:#8e0100;
   --red-700:#5d0304;
   --red-accent:#c60000;
+  --red-text:#e94040; /* AA-contrast (5.3:1 on #000) red for small text; --red-accent is reserved for large text, icons, and decorative use where the 3:1 graphical-object threshold applies */
   --green:#00ff73;
   --cyan:#2fe5ec;
   --text-1:#ededed;
@@ -110,7 +111,7 @@ h1,h2,h3,h4,p{ margin:0; }
   padding-inline:var(--gutter);
 }
 [id]{ scroll-margin-top:calc(var(--header-h) + 24px); }
-@media (max-width:1024px){
+@media (max-width:1279px){
   [id]{ scroll-margin-top:calc(var(--header-h-mobile) + 20px); }
 }
 .visually-hidden{
@@ -398,7 +399,7 @@ h1,h2,h3,h4,p{ margin:0; }
 .drawer-foot{ margin-top:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
 
 /* ============================= MOBILE HEADER RULES ============================= */
-@media (max-width:1024px){
+@media (max-width:1279px){
   .primary-nav, .header-cta .btn{ display:none; }
   .nav-toggle{ display:flex; }
   .nav-row{ min-height:var(--header-h-mobile); }
@@ -510,8 +511,6 @@ body.drawer-locked{ overflow:hidden; }
 
 @media (max-width:1279px){
   .hero-cards{ display:none; }
-}
-@media (max-width:1023px){
   .hero{ padding-bottom:36px; }
   .hero-art{
     position:relative;
@@ -553,7 +552,7 @@ body.drawer-locked{ overflow:hidden; }
   font-weight:700;
   letter-spacing:.08em;
   text-transform:uppercase;
-  color:var(--red-accent);
+  color:var(--red-text);
   margin-bottom:14px;
 }
 h2.condensed{
@@ -899,7 +898,7 @@ h2.condensed{
   font-weight:700;
   letter-spacing:.1em;
   text-transform:uppercase;
-  color:var(--red-accent);
+  color:var(--red-text);
   margin-bottom:10px;
 }
 .mission-card p{ font-size:15px; color:var(--text-1); line-height:1.65; }
@@ -974,7 +973,7 @@ h2.condensed{
   width:38px; height:38px;
   border-radius:50%;
   background:rgba(165,2,1,.16);
-  color:var(--red-accent);
+  color:var(--red-text);
   display:flex; align-items:center; justify-content:center;
   font-size:13px; font-weight:700;
   flex:none;
@@ -1134,7 +1133,7 @@ h2.condensed{
 }
 .footer-brand-col img{ width:150px; height:auto; margin-bottom:16px; }
 .footer-brand-col p{ font-size:14px; color:var(--text-3); line-height:1.7; max-width:320px; }
-.footer-grid h4{
+.footer-grid h3{
   font-size:13px;
   font-weight:700;
   letter-spacing:.06em;
@@ -1174,6 +1173,43 @@ h2.condensed{
   .footer-grid{ grid-template-columns:1fr; }
   .footer-bottom{ flex-direction:column; align-items:flex-start; }
 }
+
+/* ============================= HANDOFF NOTES ============================= */
+.handoff-wrap{ background:#000; padding-block:28px 40px; }
+.handoff-notes{
+  border:1px dashed var(--border-strong);
+  border-radius:var(--r-md);
+  padding:4px 20px;
+}
+.handoff-notes summary{
+  cursor:pointer;
+  padding:14px 0;
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--text-3);
+  letter-spacing:.01em;
+  list-style:none;
+}
+.handoff-notes summary::-webkit-details-marker{ display:none; }
+.handoff-notes summary::before{
+  content:"+ ";
+  color:var(--red-text);
+  font-weight:700;
+}
+.handoff-notes[open] summary::before{ content:"\2212 "; }
+.handoff-body{ padding:4px 0 22px; border-top:1px solid var(--border); }
+.handoff-body h4{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--text-2);
+  margin:20px 0 10px;
+}
+.handoff-body h4:first-child{ margin-top:18px; }
+.handoff-body ul{ display:flex; flex-direction:column; gap:8px; padding-left:18px; list-style:disc; }
+.handoff-body li{ font-size:13.5px; color:var(--text-4); line-height:1.65; }
+.handoff-body li b{ color:var(--text-2); font-weight:600; }
 
 /* ============================= LEGAL MODALS ============================= */
 .modal-scrim{
@@ -1238,7 +1274,7 @@ h2.condensed{
 }
 .mobile-bar a{ color:#fff; background:linear-gradient(180deg,#b00604,var(--red-600)); }
 .mobile-bar svg{ width:20px; height:20px; }
-@media (max-width:1023px){
+@media (max-width:1279px){
   .mobile-bar{ display:flex; }
   body{ padding-bottom:64px; }
 }
@@ -1262,7 +1298,7 @@ h2.condensed{
 }
 .back-to-top.is-visible{ opacity:1; visibility:visible; transform:translateY(0); }
 .back-to-top svg{ width:19px; height:19px; }
-@media (min-width:1024px){
+@media (min-width:1280px){
   .back-to-top{ bottom:28px; }
 }
 
@@ -1885,7 +1921,7 @@ h2.condensed{
         <p>Tow Factory Towing Services &mdash; affordable, reliable towing and vehicle recovery available 24/7 across the Philippines.</p>
       </div>
       <div>
-        <h4>Quick Links</h4>
+        <h3>Quick Links</h3>
         <ul>
           <li><a href="#top" data-nav>Home</a></li>
           <li><a href="#about" data-nav>About</a></li>
@@ -1897,7 +1933,7 @@ h2.condensed{
         </ul>
       </div>
       <div>
-        <h4>Contact Us</h4>
+        <h3>Contact Us</h3>
         <div class="footer-contact-item">
           <b>Garage Address</b>
           <span>1. 342 M. Ramoy compd. Quirino Hiway, Novaliches, Q.C.</span>
@@ -1930,6 +1966,36 @@ h2.condensed{
     </div>
   </div>
 </footer>
+
+<div class="handoff-wrap">
+  <div class="container">
+    <details class="handoff-notes">
+      <summary>Handoff notes for the client (click to expand)</summary>
+      <div class="handoff-body">
+        <h4>Resolved during this build</h4>
+        <ul>
+          <li>Hotline numbers: confirmed as <b>(0969) 348 6078</b> / <b>(0945) 108 0849</b> &mdash; matches all five source PDFs. The original mockup image rendered slightly different digits; that was a mockup artifact and has been corrected everywhere on this page.</li>
+          <li>Coverage wording: the hero keeps &ldquo;All Over the Philippines / Nationwide Coverage&rdquo; per the approved mockup; the Service Areas section states the detailed operational scope (Metro Manila, NLEX, SLEX, Luzon Provinces) from the PDFs underneath it.</li>
+          <li>Vehicle brands list (Honda, Hyundai, BMW, Rapide, Toyota) confirmed directly &mdash; replaces a list that was truncated at the edge of the source PDF page.</li>
+        </ul>
+        <h4>Still pending from the client</h4>
+        <ul>
+          <li><b>FAQ content</b> &mdash; the section, nav link, and #faq anchor are fully wired; questions and answers were intentionally left out of this pass per instruction, to be added once finalized.</li>
+          <li><b>Privacy Policy &amp; Terms and Conditions</b> &mdash; footer links and modal dialogs are fully wired (focus trap, Escape to close); the legal copy itself was intentionally left out of this pass per instruction.</li>
+        </ul>
+        <h4>What's demo-only in this preview</h4>
+        <ul>
+          <li>The contact form does not send anywhere. Submitting valid input shows an on-page preview of what would be sent; no email or SMS is dispatched.</li>
+          <li>&ldquo;Send Your Location&rdquo; uses real browser geolocation and appends coordinates + a Maps link to the message field &mdash; it does not notify a dispatcher.</li>
+        </ul>
+        <h4>Worth a look before public launch</h4>
+        <ul>
+          <li>Customer review dates are reproduced verbatim from the source PDF as relative text (&ldquo;3 weeks ago&rdquo;, etc.) and will read oddly once time passes; consider swapping to absolute dates.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</div>
 
 <div class="modal-scrim" data-modal-scrim></div>
 <div class="legal-modal" id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="modal-privacy-title">
