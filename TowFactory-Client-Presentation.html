@@ -1456,6 +1456,30 @@ h2.condensed{
   [data-reveal]{ opacity:1; transform:none; clip-path:none; transition:none; will-change:auto; }
 }
 
+/* ---------- Section eyebrow underline ----------
+   Draws left-to-right as the heading enters. Uses --accent so it tracks the
+   theme switcher. Absolutely positioned, so it adds no layout height and
+   cannot affect the overflow checks. */
+.eyebrow{ position:relative; }
+.eyebrow::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-5px;
+  height:2px;
+  border-radius:2px;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:left center;
+  transition:transform .8s var(--ease-out-expo) 140ms;
+}
+.eyebrow.is-underlined::after{ transform:scaleX(1); }
+
+@media (prefers-reduced-motion:reduce){
+  .eyebrow::after{ transform:scaleX(1); transition:none; }
+}
+
 /* ---------- Scroll-linked parallax ----------
    Transform is written from JS on a rAF loop; these rules only set up the
    layers. Parallax targets must never carry a transform transition, or the
@@ -2237,6 +2261,14 @@ h2.condensed{
 (function(){
   "use strict";
 
+  /* ---------- Motion preference ----------
+     Declared first: the eased scroller, scroll reveal, parallax, and eyebrow
+     underline all gate on this, and the scroller is defined well above them. */
+  var reduceMotionQuery = window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+    : null;
+  function prefersReducedMotion(){ return !!(reduceMotionQuery && reduceMotionQuery.matches); }
+
   /* ---------- Theme switcher (presentation preview only) ---------- */
   (function(){
     var THEMES = ['red','amber','blue','green'];
@@ -2367,12 +2399,80 @@ h2.condensed{
     });
   }
 
+  /* ---------- Eased programmatic scrolling ----------
+     Native scroll-behavior:smooth is left in the stylesheet so anchors we do
+     not intercept still glide, but it is suspended for the duration of our own
+     animation -- otherwise the CSS smoothing would fight every scrollTo() the
+     rAF loop makes. */
+  var docEl = document.documentElement;
+  var scrollAnimRAF = 0;
+  var scrollAnimCleanup = null;
+
+  function easeInOutCubic(t){
+    return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
+  }
+
+  function animateScrollTo(targetY, onDone){
+    var maxY = Math.max(0, docEl.scrollHeight - window.innerHeight);
+    targetY = Math.max(0, Math.min(targetY, maxY));
+
+    if(scrollAnimCleanup) scrollAnimCleanup();
+
+    if(prefersReducedMotion()){
+      window.scrollTo(0, targetY);
+      if(onDone) onDone();
+      return;
+    }
+
+    var startY = window.pageYOffset;
+    var delta = targetY - startY;
+    if(Math.abs(delta) < 2){ if(onDone) onDone(); return; }
+
+    // Longer trips take longer, but stay inside a range that never feels sluggish.
+    var duration = Math.min(900, Math.max(400, Math.abs(delta) * 0.55));
+    var startTime = performance.now();
+    var prevBehavior = docEl.style.scrollBehavior;
+    docEl.style.scrollBehavior = 'auto';
+
+    function abort(){ if(scrollAnimCleanup) scrollAnimCleanup(); }
+    // Any real input hands control straight back to the user.
+    window.addEventListener('wheel', abort, { passive: true });
+    window.addEventListener('touchstart', abort, { passive: true });
+    window.addEventListener('keydown', abort);
+
+    scrollAnimCleanup = function(){
+      if(scrollAnimRAF) cancelAnimationFrame(scrollAnimRAF);
+      scrollAnimRAF = 0;
+      scrollAnimCleanup = null;
+      docEl.style.scrollBehavior = prevBehavior;
+      window.removeEventListener('wheel', abort);
+      window.removeEventListener('touchstart', abort);
+      window.removeEventListener('keydown', abort);
+    };
+
+    function step(now){
+      var t = Math.min(1, (now - startTime) / duration);
+      window.scrollTo(0, startY + delta * easeInOutCubic(t));
+      if(t < 1){
+        scrollAnimRAF = requestAnimationFrame(step);
+      } else {
+        if(scrollAnimCleanup) scrollAnimCleanup();
+        if(onDone) onDone();
+      }
+    }
+    scrollAnimRAF = requestAnimationFrame(step);
+  }
+
   /* ---------- Smooth in-page navigation without polluting history ---------- */
   var headerEl = document.querySelector('.site-header');
   function scrollToId(id, focusTarget){
     var el = document.getElementById(id);
     if(!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // scroll-margin-top carries the sticky-header offset; read it rather than
+    // duplicating the header-height constant here.
+    var offset = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+    var targetY = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    animateScrollTo(targetY);
     if(history.replaceState) history.replaceState(null, '', '#' + id);
     if(focusTarget){
       window.setTimeout(function(){
@@ -2583,16 +2683,10 @@ h2.condensed{
       backToTop.classList.toggle('is-visible', window.scrollY > window.innerHeight * 1.4);
     }, { passive: true });
     backToTop.addEventListener('click', function(){
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      animateScrollTo(0);
       if(history.replaceState) history.replaceState(null, '', location.pathname + location.search);
     });
   }
-
-  /* ---------- Motion preference (shared by reveal + parallax) ---------- */
-  var reduceMotionQuery = window.matchMedia
-    ? window.matchMedia('(prefers-reduced-motion: reduce)')
-    : null;
-  function prefersReducedMotion(){ return !!(reduceMotionQuery && reduceMotionQuery.matches); }
 
   /* ---------- Scroll reveal ---------- */
   /* Grid children stagger; standalone panels don't. Staggering is capped so a
@@ -2645,6 +2739,23 @@ h2.condensed{
   } else {
     // No IntersectionObserver, or motion is reduced: show everything immediately.
     revealTargets.forEach(function(el){ el.classList.add('is-revealed', 'is-settled'); });
+  }
+
+  /* ---------- Section eyebrow underline ---------- */
+  // Every eyebrow, not a subset -- an unobserved one would keep its ::after at
+  // scaleX(0) forever, leaving an invisible rule that never draws.
+  var eyebrows = document.querySelectorAll('.eyebrow');
+  if('IntersectionObserver' in window && eyebrows.length && !prefersReducedMotion()){
+    var eyebrowObserver = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting) return;
+        entry.target.classList.add('is-underlined');
+        obs.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.5 });
+    Array.prototype.forEach.call(eyebrows, function(el){ eyebrowObserver.observe(el); });
+  } else {
+    Array.prototype.forEach.call(eyebrows, function(el){ el.classList.add('is-underlined'); });
   }
 
   /* ---------- Scroll-linked parallax ----------
