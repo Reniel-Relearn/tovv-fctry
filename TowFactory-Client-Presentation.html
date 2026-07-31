@@ -2741,6 +2741,53 @@ h2.condensed{
     revealTargets.forEach(function(el){ el.classList.add('is-revealed', 'is-settled'); });
   }
 
+  /* ---------- Brand marquee: fill the viewport at any width ----------
+     The track scrolls by -50%, so it must be two identical halves and each
+     half has to be at least as wide as the viewport -- otherwise the tail of
+     the loop leaves empty space on the right. The markup ships one set per
+     half, which is enough at ~1280px but not on a wide monitor, so clone the
+     set until a half covers the screen. */
+  (function(){
+    var track = document.querySelector('.marquee-track');
+    if(!track) return;
+    var SET_SIZE = 5;                                    // distinct brands
+    var originals = Array.prototype.slice.call(track.children, 0, SET_SIZE);
+    if(originals.length < SET_SIZE) return;
+    var built = -1;
+
+    function fill(){
+      // Distance from a chip to its counterpart one set later == one set's
+      // width including the trailing gap. Measured, not assumed, because the
+      // gap and font metrics differ per breakpoint.
+      var probe = track.children[SET_SIZE];
+      if(!probe) return;
+      var unitWidth = probe.offsetLeft - track.children[0].offsetLeft;
+      if(unitWidth <= 0) return;
+
+      var setsPerHalf = Math.max(2, Math.ceil(window.innerWidth / unitWidth) + 1);
+      if(setsPerHalf === built) return;                  // nothing to redo
+      built = setsPerHalf;
+
+      var frag = document.createDocumentFragment();
+      for(var half = 0; half < 2; half++){
+        for(var s = 0; s < setsPerHalf; s++){
+          for(var i = 0; i < SET_SIZE; i++){
+            frag.appendChild(originals[i].cloneNode(true));
+          }
+        }
+      }
+      track.textContent = '';
+      track.appendChild(frag);
+    }
+
+    fill();
+    var fillTimer = 0;
+    window.addEventListener('resize', function(){
+      window.clearTimeout(fillTimer);
+      fillTimer = window.setTimeout(fill, 150);
+    }, { passive: true });
+  })();
+
   /* ---------- Section eyebrow underline ---------- */
   // Every eyebrow, not a subset -- an unobserved one would keep its ::after at
   // scaleX(0) forever, leaving an invisible rule that never draws.
