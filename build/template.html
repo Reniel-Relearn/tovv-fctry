@@ -1418,15 +1418,81 @@ h2.condensed{
 .theme-switcher-wrap[data-collapsed="true"].is-peeking .theme-switcher{ display:flex; }
 .theme-switcher-wrap[data-collapsed="true"].is-peeking .theme-trigger{ display:none; }
 
-/* ============================= SCROLL REVEAL ============================= */
+/* ============================= SCROLL REVEAL =============================
+   Variant system: each target gets data-reveal="up|rise|fade|clip" assigned
+   in JS by element kind, plus a --reveal-delay for grid stagger. Easing is
+   expo-out -- it covers most of the distance immediately then settles, which
+   reads faster than its 600ms duration and avoids bouncy overshoot. */
+:root{
+  --ease-out-expo:cubic-bezier(0.16, 1, 0.3, 1);
+  --reveal-dur:.6s;
+  --reveal-travel:24px;
+}
 [data-reveal]{
   opacity:0;
-  transform:translateY(18px);
-  transition:opacity .5s ease, transform .5s ease;
+  transition:
+    opacity var(--reveal-dur) var(--ease-out-expo) var(--reveal-delay,0ms),
+    transform var(--reveal-dur) var(--ease-out-expo) var(--reveal-delay,0ms),
+    clip-path var(--reveal-dur) var(--ease-out-expo) var(--reveal-delay,0ms);
+  will-change:opacity, transform;
 }
-[data-reveal].is-revealed{ opacity:1; transform:translateY(0); }
+[data-reveal="up"]{ transform:translateY(var(--reveal-travel)); }
+[data-reveal="rise"]{ transform:translateY(var(--reveal-travel)) scale(.985); }
+[data-reveal="fade"]{ transform:none; }
+[data-reveal="clip"]{
+  transform:translateY(calc(var(--reveal-travel) * .5));
+  clip-path:inset(0 0 14% 0);
+}
+[data-reveal].is-revealed{
+  opacity:1;
+  transform:none;
+  clip-path:inset(0 0 0 0);
+}
+/* Drop the compositor hint once the animation has run so long pages don't
+   accumulate dozens of promoted layers. */
+[data-reveal].is-settled{ will-change:auto; transition:none; }
+
 @media (prefers-reduced-motion:reduce){
-  [data-reveal]{ opacity:1; transform:none; transition:none; }
+  [data-reveal]{ opacity:1; transform:none; clip-path:none; transition:none; will-change:auto; }
+}
+
+/* ---------- Scroll-linked parallax ----------
+   Transform is written from JS on a rAF loop; these rules only set up the
+   layers. Parallax targets must never carry a transform transition, or the
+   motion would lag a frame behind the scroll and feel rubbery. */
+[data-parallax]{ transition:none; }
+
+/* The media image is scaled up slightly so vertical drift never exposes an
+   edge inside its clipped, rounded frame. */
+.positioning-media img[data-parallax]{
+  transform:scale(1.14);
+  transform-origin:center center;
+}
+
+@media (prefers-reduced-motion:reduce){
+  [data-parallax]{ transform:none !important; will-change:auto !important; }
+  .positioning-media img[data-parallax]{ transform:none !important; }
+}
+
+/* ---------- Hero entrance ----------
+   Applied by JS on load only. The .hero-enter class is added and .hero-entered
+   follows on the next frame, so the transition always has a start state.
+   Buttons remain clickable throughout -- only opacity/transform are staged. */
+.hero-enter{
+  opacity:0;
+  transform:translateY(16px);
+  transition:
+    opacity .7s var(--ease-out-expo) var(--hero-delay,0ms),
+    transform .7s var(--ease-out-expo) var(--hero-delay,0ms);
+}
+/* The art is a wide raster; a vertical slide would expose its edge against the
+   hero. Fade it in place instead, and keep the translate out of the transform
+   so the parallax layer (Phase B) owns transform exclusively. */
+.hero-art.hero-enter{ transform:none; transition:opacity .9s var(--ease-out-expo) var(--hero-delay,0ms); }
+.hero-enter.hero-entered{ opacity:1; transform:none; }
+
+@media (prefers-reduced-motion:reduce){
+  .hero-enter{ opacity:1; transform:none; transition:none; }
 }
 
 /* ============================= PRINT ============================= */
@@ -2522,24 +2588,249 @@ h2.condensed{
     });
   }
 
+  /* ---------- Motion preference (shared by reveal + parallax) ---------- */
+  var reduceMotionQuery = window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+    : null;
+  function prefersReducedMotion(){ return !!(reduceMotionQuery && reduceMotionQuery.matches); }
+
   /* ---------- Scroll reveal ---------- */
-  var revealTargets = document.querySelectorAll(
-    '.service-card, .pillar, .promise-card, .review-card, .mission-card, .signal-item, ' +
-    '.branch-panel, .coverage-panel, .positioning-copy, .positioning-media, ' +
-    '.about-main, .mission-stack, .contact-form, .contact-copy, .commitment-panel'
-  );
-  if('IntersectionObserver' in window && revealTargets.length){
-    revealTargets.forEach(function(el){ el.setAttribute('data-reveal', ''); });
+  /* Grid children stagger; standalone panels don't. Staggering is capped so a
+     long grid doesn't leave its last card animating a second after the first. */
+  var REVEAL_STEP_MS = 55;
+  var REVEAL_MAX_STEPS = 6;
+  var revealVariants = [
+    ['rise', '.service-card, .pillar, .promise-card, .review-card, .mission-card, .signal-item'],
+    ['fade', '.branch-panel, .coverage-panel, .contact-form, .commitment-panel, .mission-stack'],
+    ['up',   '.positioning-copy, .about-main, .contact-copy'],
+    ['clip', '.positioning-media']
+  ];
+
+  var revealTargets = [];
+  revealVariants.forEach(function(pair){
+    var variant = pair[0];
+    Array.prototype.forEach.call(document.querySelectorAll(pair[1]), function(el){
+      if(el.hasAttribute('data-reveal')) return; // first matching variant wins
+      el.setAttribute('data-reveal', variant);
+      revealTargets.push(el);
+    });
+  });
+
+  if('IntersectionObserver' in window && revealTargets.length && !prefersReducedMotion()){
+    // Stagger by position among same-variant siblings, so each grid restarts at 0.
+    var staggerSeen = new Map();
+    revealTargets.forEach(function(el){
+      var parent = el.parentNode;
+      if(!parent) return;
+      var key = parent;
+      var idx = staggerSeen.get(key) || 0;
+      staggerSeen.set(key, idx + 1);
+      if(idx > 0){
+        el.style.setProperty('--reveal-delay', Math.min(idx, REVEAL_MAX_STEPS) * REVEAL_STEP_MS + 'ms');
+      }
+    });
+
     var revealObserver = new IntersectionObserver(function(entries, obs){
       entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          entry.target.classList.add('is-revealed');
-          obs.unobserve(entry.target);
-        }
+        if(!entry.isIntersecting) return;
+        var el = entry.target;
+        el.classList.add('is-revealed');
+        obs.unobserve(el);
+        // Release the compositor layer once this element has finished moving.
+        var settleAfter = 900 + (parseFloat(el.style.getPropertyValue('--reveal-delay')) || 0);
+        window.setTimeout(function(){ el.classList.add('is-settled'); }, settleAfter);
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
     revealTargets.forEach(function(el){ revealObserver.observe(el); });
+  } else {
+    // No IntersectionObserver, or motion is reduced: show everything immediately.
+    revealTargets.forEach(function(el){ el.classList.add('is-revealed', 'is-settled'); });
   }
+
+  /* ---------- Scroll-linked parallax ----------
+     One rAF loop drives every layer. Layout is read once per frame into a
+     cached list, and all writes happen after, so we never interleave reads and
+     writes (which would force synchronous layout on each element).
+     Desktop only: below 1280px the hero stacks differently and low-end mobile
+     doesn't have the headroom. */
+  var PARALLAX_MIN_WIDTH = 1280;
+  var parallaxLayers = [];
+  var parallaxRAF = 0;
+  var parallaxEnabled = false;
+  var scrolling = false;
+  var scrollIdleTimer = 0;
+
+  function registerParallax(selector, rate, baseTransform){
+    Array.prototype.forEach.call(document.querySelectorAll(selector), function(el){
+      el.setAttribute('data-parallax', '');
+      parallaxLayers.push({
+        el: el,
+        rate: rate,
+        base: baseTransform || '',
+        top: 0,
+        height: 0,
+        rest: 0.5,
+        active: false,
+        applied: null
+      });
+    });
+  }
+
+  function progressFor(layer, scrollY, viewH){
+    return (scrollY + viewH - layer.top) / (viewH + layer.height);
+  }
+
+  function measureParallax(){
+    var scrollY = window.pageYOffset;
+    var viewH = window.innerHeight;
+    parallaxLayers.forEach(function(layer){
+      // getBoundingClientRect is viewport-relative; add scroll for doc position.
+      var rect = layer.el.getBoundingClientRect();
+      layer.top = rect.top + scrollY;
+      // A container whose children are all absolutely positioned measures 0
+      // high, which would silently multiply every offset to zero. Fall back to
+      // the viewport so such a layer still moves instead of dying quietly.
+      layer.height = rect.height > 1 ? rect.height : viewH;
+      // An element already on screen at the top of the page (the hero) must sit
+      // at its designed position when scrollY is 0 -- that's the layout the
+      // client approved. Anchor its neutral point there instead of at viewport
+      // centre, which is the right default for everything further down.
+      layer.rest = (layer.top < viewH) ? progressFor(layer, 0, viewH) : 0.5;
+    });
+  }
+
+  function updateParallax(){
+    parallaxRAF = 0;
+    if(!parallaxEnabled) return;
+    var scrollY = window.pageYOffset;
+    var viewH = window.innerHeight;
+
+    for(var i = 0; i < parallaxLayers.length; i++){
+      var layer = parallaxLayers[i];
+      var visible = (layer.top < scrollY + viewH) && (layer.top + layer.height > scrollY);
+
+      if(!visible){
+        if(layer.active){
+          layer.active = false;
+          layer.el.style.willChange = 'auto';   // release the compositor layer
+        }
+        continue;
+      }
+      // Promote only while the user is actually scrolling. A permanent
+      // will-change keeps the layer composited at rest, which forces text to
+      // grayscale antialiasing -- visibly softer than the subpixel rendering
+      // these cards are read at at rest.
+      if(scrolling && !layer.active){
+        layer.active = true;
+        layer.el.style.willChange = 'transform';
+      }
+
+      // Offset is measured against the layer's neutral point (see measureParallax),
+      // so nothing jumps away from its designed position on first paint.
+      var offset = (progressFor(layer, scrollY, viewH) - layer.rest) * layer.height * layer.rate;
+      // A translate3d promotes a compositor layer even at zero offset, and a
+      // promoted layer renders text with grayscale rather than subpixel
+      // antialiasing. At the neutral point (the hero at scroll 0 -- the state
+      // the client approved) drop the transform entirely so the resting page
+      // rasterises exactly as designed.
+      var next = Math.abs(offset) < 0.5
+        ? layer.base
+        : 'translate3d(0,' + offset.toFixed(2) + 'px,0)' + (layer.base ? ' ' + layer.base : '');
+      if(next !== layer.applied){       // skip redundant style writes
+        layer.el.style.transform = next;
+        layer.applied = next;
+      }
+    }
+  }
+
+  function releaseParallaxLayers(){
+    scrolling = false;
+    parallaxLayers.forEach(function(layer){
+      if(layer.active){
+        layer.active = false;
+        layer.el.style.willChange = 'auto';
+      }
+    });
+  }
+
+  function onParallaxScroll(){
+    scrolling = true;
+    window.clearTimeout(scrollIdleTimer);
+    scrollIdleTimer = window.setTimeout(releaseParallaxLayers, 180);
+    if(!parallaxRAF) parallaxRAF = requestAnimationFrame(updateParallax);
+  }
+
+  function evaluateParallax(){
+    var shouldRun = !prefersReducedMotion() && window.innerWidth >= PARALLAX_MIN_WIDTH;
+    if(shouldRun === parallaxEnabled) return;
+    parallaxEnabled = shouldRun;
+    if(shouldRun){
+      measureParallax();
+      updateParallax();
+    } else {
+      // Hand every layer back to CSS so the static layout is exactly as designed.
+      parallaxLayers.forEach(function(layer){
+        layer.el.style.transform = '';
+        layer.el.style.willChange = 'auto';
+        layer.active = false;
+        layer.applied = null;
+      });
+    }
+  }
+
+  // Hero art and cards move at slightly different rates, which separates the
+  // cards from the truck without shifting their approved resting position.
+  registerParallax('.hero-art', 0.12);
+  registerParallax('.hero-card', 0.30);
+  registerParallax('.positioning-media img', 0.16, 'scale(1.14)');
+
+  if(parallaxLayers.length){
+    evaluateParallax();
+    window.addEventListener('scroll', onParallaxScroll, { passive: true });
+    window.addEventListener('resize', function(){
+      evaluateParallax();
+      if(parallaxEnabled){ measureParallax(); onParallaxScroll(); }
+    }, { passive: true });
+    // Late-loading images (the lazy media shot) change layout; re-measure.
+    window.addEventListener('load', function(){
+      if(parallaxEnabled){ measureParallax(); onParallaxScroll(); }
+    });
+    if(reduceMotionQuery && reduceMotionQuery.addEventListener){
+      reduceMotionQuery.addEventListener('change', evaluateParallax);
+    }
+  }
+
+  /* ---------- Hero entrance ---------- */
+  /* Runs once on load. CTAs are never gated on this -- they're clickable from
+     first paint; only the visual transition is deferred. */
+  (function(){
+    if(prefersReducedMotion()) return;
+    var heroSteps = [
+      ['.hero-copy h1', 0],
+      ['.hero-copy > p', 90],
+      ['.hero-actions', 170],
+      ['.hero-actions-secondary', 230],
+      ['.hero-art', 120]
+      // The hero cards are deliberately excluded. Their box sits at a
+      // fractional y (226.69px), so the compositor layer an opacity animation
+      // creates gets origin-snapped to a whole pixel and their text rasterises
+      // ~2px off the approved mockup. They fade in via parallax-free CSS only.
+    ];
+    var staged = [];
+    heroSteps.forEach(function(step){
+      var el = document.querySelector(step[0]);
+      if(!el) return;
+      el.classList.add('hero-enter');
+      el.style.setProperty('--hero-delay', step[1] + 'ms');
+      staged.push(el);
+    });
+    if(!staged.length) return;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        staged.forEach(function(el){ el.classList.add('hero-entered'); });
+      });
+    });
+  })();
 })();
 </script>
 </body>
