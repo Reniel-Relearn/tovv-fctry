@@ -1348,12 +1348,22 @@ h2.condensed{
 }
 
 /* ============================= THEME SWITCHER (presentation preview only,
-   not part of the final site) ============================= */
-.theme-switcher{
+   not part of the final site) =============================
+   Collapses to a near-invisible dot after a swatch is picked, so it's out
+   of the client's way; hovering (or focusing) the dot reveals the full
+   panel again. Collapse state is remembered separately from the chosen
+   theme, so a returning reviewer sees the discreet dot, not the full
+   panel, once they've made a pick before. */
+.theme-switcher-wrap{
   position:fixed;
   left:14px;
   bottom:78px;
   z-index:95;
+}
+@media (min-width:1280px){
+  .theme-switcher-wrap{ bottom:20px; }
+}
+.theme-switcher{
   display:flex;
   align-items:center;
   gap:9px;
@@ -1363,9 +1373,6 @@ h2.condensed{
   border:1px solid var(--border-strong);
   border-radius:var(--r-pill);
   box-shadow:0 10px 24px -8px rgba(0,0,0,.6);
-}
-@media (min-width:1280px){
-  .theme-switcher{ bottom:20px; }
 }
 .theme-switcher .ts-label{
   font-family:var(--font-ui);
@@ -1392,6 +1399,24 @@ h2.condensed{
 .theme-swatch[data-theme-set="amber"]{ background:#b45309; }
 .theme-swatch[data-theme-set="blue"]{ background:#1d4ed8; }
 .theme-swatch[data-theme-set="green"]{ background:#15803d; }
+
+.theme-trigger{
+  display:none;
+  width:10px; height:10px;
+  border-radius:50%;
+  border:none;
+  padding:0;
+  cursor:pointer;
+  background:conic-gradient(from 180deg,#a50201,#b45309,#1d4ed8,#15803d,#a50201);
+  opacity:.22;
+  transition:opacity .15s ease, transform .15s ease;
+}
+.theme-trigger:hover,.theme-trigger:focus-visible{ opacity:1; transform:scale(1.6); }
+
+.theme-switcher-wrap[data-collapsed="true"] .theme-switcher{ display:none; }
+.theme-switcher-wrap[data-collapsed="true"] .theme-trigger{ display:block; }
+.theme-switcher-wrap[data-collapsed="true"].is-peeking .theme-switcher{ display:flex; }
+.theme-switcher-wrap[data-collapsed="true"].is-peeking .theme-trigger{ display:none; }
 
 /* ============================= SCROLL REVEAL ============================= */
 [data-reveal]{
@@ -2127,13 +2152,16 @@ h2.condensed{
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
-<div class="theme-switcher" role="group" aria-label="Preview color theme -- presentation aid only, not part of the final site">
-  <span class="ts-label">Preview</span>
-  <div class="ts-swatches">
-    <button class="theme-swatch" type="button" data-theme-set="red" aria-pressed="true" aria-label="Red (mockup default)"></button>
-    <button class="theme-swatch" type="button" data-theme-set="amber" aria-pressed="false" aria-label="Amber"></button>
-    <button class="theme-swatch" type="button" data-theme-set="blue" aria-pressed="false" aria-label="Blue"></button>
-    <button class="theme-swatch" type="button" data-theme-set="green" aria-pressed="false" aria-label="Green"></button>
+<div class="theme-switcher-wrap" id="themeSwitcherWrap" data-collapsed="false">
+  <button class="theme-trigger" type="button" aria-label="Show color preview switcher"></button>
+  <div class="theme-switcher" role="group" aria-label="Preview color theme -- presentation aid only, not part of the final site">
+    <span class="ts-label">Preview</span>
+    <div class="ts-swatches">
+      <button class="theme-swatch" type="button" data-theme-set="red" aria-pressed="true" aria-label="Red (mockup default)"></button>
+      <button class="theme-swatch" type="button" data-theme-set="amber" aria-pressed="false" aria-label="Amber"></button>
+      <button class="theme-swatch" type="button" data-theme-set="blue" aria-pressed="false" aria-label="Blue"></button>
+      <button class="theme-swatch" type="button" data-theme-set="green" aria-pressed="false" aria-label="Green"></button>
+    </div>
   </div>
 </div>
 </main>
@@ -2149,6 +2177,9 @@ h2.condensed{
     var STORAGE_KEY = 'towfactory-preview-theme';
     var root = document.documentElement;
     var swatches = document.querySelectorAll('.theme-swatch');
+    var wrap = document.getElementById('themeSwitcherWrap');
+    var trigger = wrap ? wrap.querySelector('.theme-trigger') : null;
+    var COLLAPSE_KEY = 'towfactory-preview-collapsed';
 
     function applyTheme(name){
       if(name === 'red'){ root.removeAttribute('data-theme'); }
@@ -2158,17 +2189,38 @@ h2.condensed{
       });
     }
 
+    function setCollapsed(val){
+      if(!wrap) return;
+      wrap.setAttribute('data-collapsed', val ? 'true' : 'false');
+      try{ localStorage.setItem(COLLAPSE_KEY, val ? '1' : '0'); }catch(e){}
+    }
+
     var saved = null;
     try{ saved = localStorage.getItem(STORAGE_KEY); }catch(e){}
     if(saved && THEMES.indexOf(saved) !== -1){ applyTheme(saved); }
+
+    var savedCollapsed = null;
+    try{ savedCollapsed = localStorage.getItem(COLLAPSE_KEY); }catch(e){}
+    if(savedCollapsed === '1'){ setCollapsed(true); }
 
     swatches.forEach(function(btn){
       btn.addEventListener('click', function(){
         var name = btn.getAttribute('data-theme-set');
         applyTheme(name);
         try{ localStorage.setItem(STORAGE_KEY, name); }catch(e){}
+        setCollapsed(true);
+        if(wrap) wrap.classList.remove('is-peeking');
       });
     });
+
+    if(wrap && trigger){
+      trigger.addEventListener('mouseenter', function(){ wrap.classList.add('is-peeking'); });
+      trigger.addEventListener('focus', function(){ wrap.classList.add('is-peeking'); });
+      wrap.addEventListener('mouseleave', function(){ wrap.classList.remove('is-peeking'); });
+      wrap.addEventListener('focusout', function(e){
+        if(!wrap.contains(e.relatedTarget)){ wrap.classList.remove('is-peeking'); }
+      });
+    }
   })();
 
   /* ---------- Mobile drawer ---------- */
