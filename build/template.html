@@ -1456,6 +1456,84 @@ h2.condensed{
   [data-reveal]{ opacity:1; transform:none; clip-path:none; transition:none; will-change:auto; }
 }
 
+/* ---------- Hero ambient motion ----------
+   The hero art is a single flat raster, so the truck cannot be separated from
+   its background. Motion is suggested instead: the whole plate rides a gentle
+   suspension bob (written from JS, composed with the parallax offset so there
+   is one transform owner), the amber light bar pulses, and light streaks run
+   along the wet road. */
+.hero-fx{
+  position:absolute;
+  top:0;
+  right:0;
+  width:66.75%;              /* matches .hero-art */
+  aspect-ratio:1116 / 663;   /* matches the art's intrinsic ratio */
+  pointer-events:none;
+  z-index:1;
+  overflow:hidden;
+}
+
+/* Amber beacon, centred on the light bar at 44.4% / 31.1% of the art. */
+/* Elliptical, not circular: the bar is a 170x17 strip, and a circle wide
+   enough to cover it bled up onto the Coverage card above. */
+.fx-lightbar{
+  position:absolute;
+  left:44.4%;
+  top:31.1%;
+  width:19%;
+  height:7.5%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse closest-side,
+    rgba(255,190,96,.92) 0%,
+    rgba(255,146,26,.40) 45%,
+    rgba(255,120,0,0) 100%);
+  /* Deliberately NOT mix-blend-mode:screen. Blending an animated element
+     forces a backdrop re-composite every frame -- measured at 4x CPU
+     throttle that alone pushed 16 of 90 frames past 32ms, while plain alpha
+     held a solid 60fps. Over this near-black backdrop the two are visually
+     near-identical, so the blend bought nothing. */
+  opacity:0;
+  animation:fx-beacon 2.4s ease-in-out infinite;
+}
+@keyframes fx-beacon{
+  0%,58%,100%{ opacity:.15; transform:translate(-50%,-50%) scale(.86); }
+  12%        { opacity:1;   transform:translate(-50%,-50%) scale(1.12); }
+  26%        { opacity:.28; transform:translate(-50%,-50%) scale(.94); }
+  40%        { opacity:.92; transform:translate(-50%,-50%) scale(1.06); }
+}
+
+/* Streaks along the wet asphalt, suggesting forward travel. */
+.fx-streak{
+  position:absolute;
+  height:2px;
+  border-radius:2px;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,206,156,.62) 45%,
+    rgba(255,120,40,0) 100%);
+  opacity:0;
+  will-change:transform, opacity;
+}
+.fx-streak-1{ top:88%; width:26%; animation:fx-streak 2.9s linear infinite; }
+.fx-streak-2{ top:93%; width:18%; animation:fx-streak 2.2s linear .7s infinite; }
+.fx-streak-3{ top:83%; width:14%; animation:fx-streak 3.6s linear 1.5s infinite; }
+@keyframes fx-streak{
+  0%  { transform:translateX(115%); opacity:0; }
+  12% { opacity:.75; }
+  78% { opacity:.5; }
+  100%{ transform:translateX(-130%); opacity:0; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-fx{ display:none; }
+}
+/* Below 1280 the plate is cropped tight and the glow would drift off the
+   truck, so the layer drops out with the desktop-only parallax. */
+@media (max-width:1279px){
+  .hero-fx{ display:none; }
+}
+
 /* ---------- Section eyebrow underline ----------
    Draws left-to-right as the heading enters. Uses --accent so it tracks the
    theme switcher. Absolutely positioned, so it adds no layout height and
@@ -1694,6 +1772,16 @@ h2.condensed{
   </div>
 
   <img class="hero-art" src="data:image/webp;base64,{{HERO_ART_B64}}" alt="Tow Factory flatbed tow truck carrying a vehicle, with a lit-up map of the Philippines representing nationwide coverage" width="1116" height="663">
+
+  <!-- Ambient motion layer. Shares the art's box via the same width and an
+       aspect-ratio matching its intrinsic 1116x663, so the light bar glow
+       stays registered to the truck at every viewport width. -->
+  <div class="hero-fx" aria-hidden="true">
+    <span class="fx-lightbar"></span>
+    <span class="fx-streak fx-streak-1"></span>
+    <span class="fx-streak fx-streak-2"></span>
+    <span class="fx-streak fx-streak-3"></span>
+  </div>
 </section>
 <!-- PHASE3_SIGNAL_POSITIONING_PILLARS -->
 <section class="signal-strip" aria-label="Tow Factory service highlights">
@@ -2857,7 +2945,7 @@ h2.condensed{
     });
   }
 
-  function updateParallax(){
+  function updateParallax(now){
     parallaxRAF = 0;
     if(!parallaxEnabled) return;
     var scrollY = window.pageYOffset;
@@ -2886,12 +2974,21 @@ h2.condensed{
       // Offset is measured against the layer's neutral point (see measureParallax),
       // so nothing jumps away from its designed position on first paint.
       var offset = (progressFor(layer, scrollY, viewH) - layer.rest) * layer.height * layer.rate;
+      // Ambient bob rides on top of the scroll offset. Two detuned sine waves
+      // so the rhythm never reads as a mechanical loop.
+      if(layer.bob){
+        var ms = now || performance.now();
+        offset += Math.sin(ms / 1150) * 2.1 + Math.sin(ms / 437) * 0.7;
+      }
+
       // A translate3d promotes a compositor layer even at zero offset, and a
       // promoted layer renders text with grayscale rather than subpixel
-      // antialiasing. At the neutral point (the hero at scroll 0 -- the state
-      // the client approved) drop the transform entirely so the resting page
-      // rasterises exactly as designed.
-      var next = Math.abs(offset) < 0.5
+      // antialiasing, so near-zero offsets normally drop the transform to keep
+      // text crisp. A bobbing layer is exempt: its offset crosses zero every
+      // cycle, and toggling the layer on and off at each crossing would flip
+      // rasterisation continuously. The art is a photo with no text, so
+      // holding the layer costs nothing.
+      var next = (!layer.bob && Math.abs(offset) < 0.5)
         ? layer.base
         : 'translate3d(0,' + offset.toFixed(2) + 'px,0)' + (layer.base ? ' ' + layer.base : '');
       if(next !== layer.applied){       // skip redundant style writes
@@ -2941,6 +3038,49 @@ h2.condensed{
   registerParallax('.hero-art', 0.12);
   registerParallax('.hero-card', 0.30);
   registerParallax('.positioning-media img', 0.16, 'scale(1.14)');
+
+  // The hero art alone carries the ambient bob.
+  parallaxLayers.forEach(function(layer){
+    if(layer.el.classList.contains('hero-art')) layer.bob = true;
+  });
+
+  /* ---------- Ambient hero loop ----------
+     Scroll alone can't drive the bob -- a visitor who never scrolls would see
+     a completely still page, which is what "it's static" meant. Run a rAF
+     loop, but only while the hero is actually on screen, so we're not burning
+     frames (or battery) once the user has scrolled past it. */
+  (function(){
+    var hero = document.querySelector('.hero');
+    if(!hero || !('IntersectionObserver' in window)) return;
+    var ambientRAF = 0;
+
+    function ambientTick(now){
+      updateParallax(now);
+      ambientRAF = requestAnimationFrame(ambientTick);
+    }
+    function startAmbient(){
+      if(ambientRAF || !parallaxEnabled) return;
+      ambientRAF = requestAnimationFrame(ambientTick);
+    }
+    function stopAmbient(){
+      if(!ambientRAF) return;
+      cancelAnimationFrame(ambientRAF);
+      ambientRAF = 0;
+    }
+
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting) startAmbient(); else stopAmbient();
+      });
+    }, { threshold: 0 }).observe(hero);
+
+    // Pause with the tab: a background tab throttles rAF anyway, but this
+    // makes the intent explicit and stops the loop resuming mid-frame.
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden) stopAmbient();
+      else if(hero.getBoundingClientRect().bottom > 0) startAmbient();
+    });
+  })();
 
   if(parallaxLayers.length){
     evaluateParallax();
