@@ -16,6 +16,7 @@ import os
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
+from scipy import ndimage as ndi
 
 BUILD = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BUILD)
@@ -47,6 +48,21 @@ TRUCK_LEFT_X = 26      # keeps the cab off the neon map on the right
 ALPHA_CUT = 140.0
 
 
+def dissolve(img, mask, sigma=30, gain=1.45):
+    """Fade `mask` out to black with a wide feather.
+
+    Reconstructing what stood behind the old vehicle is guesswork -- it covered
+    roughly a third of the plate and the scene is stylised, so diffusion fills
+    either smear the neon map across the gap or leave blotches. The complaint
+    was never that the area went dark, it was that the darkness kept the
+    *shape* of a truck. A heavily feathered fade removes the silhouette while
+    reading as ordinary night vignetting, which this scene already has.
+    """
+    soft = ndi.gaussian_filter(mask.astype(float), sigma)
+    soft = np.clip(soft * gain, 0, 1)[:, :, None]
+    return img.astype(float) * (1.0 - soft)
+
+
 def background_plate():
     """The approved mockup with the status cards and the old vehicle removed."""
     plate = Image.open(SOURCE_PLATE).convert("RGB").crop(CROP_BOX)
@@ -72,13 +88,17 @@ def background_plate():
     foot[y1:y2, x1:x2] = True
 
     blank = foot & ~(is_map | is_glow)
-    a[blank] = 0
 
-    # Deliberately no dimming pass here. An earlier version scaled the surviving
-    # glow inside the footprint to 55%, which left the red atmosphere darker
-    # inside that rectangle than outside it -- a visible black box between the
-    # truck and the map. Pixels that merely look warm already fail the strong
-    # red-dominance test above and were blanked, so nothing needs crushing.
+    # Hard-zero first so no bodywork survives, then feather the same region so
+    # the removal has no readable outline.
+    a[blank] = 0
+    a = dissolve(a, blank)
+
+    # The map is the one thing that must not be touched: it sits behind the old
+    # vehicle's rear, so the feather would otherwise eat into Visayas/Mindanao.
+    orig = np.array(plate).astype(float)
+    a[is_map] = orig[is_map]
+
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
 
 
@@ -158,6 +178,65 @@ def graded_truck():
     )
 
 
+def tint_side_window(canvas, box=(398, 200, 512, 322), factor=0.42):
+    """Darken the cab's door glass.
+
+    The glass is found by colour inside `box` rather than by a hand-drawn
+    polygon, so the slanted window frame is followed exactly and the paintwork
+    around it is left alone. The mask is feathered so there is no hard edge.
+    """
+    a = np.array(canvas).astype(float)
+    x1, y1, x2, y2 = box
+    reg = a[y1:y2, x1:x2]
+    lum = reg.mean(axis=2)
+    sat = reg.max(axis=2) - reg.min(axis=2)
+    # The lower bound matters: the door panel just under the window sits in
+    # shadow and otherwise matches the glass test, which tinted the bodywork.
+    glass = (lum > 26) & (lum < 135) & (sat < 60)
+
+    m = ndi.gaussian_filter(glass.astype(float), 2.0)
+    m = np.clip(m * 1.25, 0, 1)[:, :, None]
+    a[y1:y2, x1:x2] = reg * (1 - m) + reg * factor * m
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
+def add_driver(canvas, head=(612, 276), scale=0.8, strength=0.34):
+    """Suggest a driver behind the windscreen.
+
+    Deliberately a soft silhouette rather than a figure: at this size any
+    detail reads as a smudge, whereas a head-and-shoulders shape darker than
+    the glass is legible as a person without drawing attention. Drawn only
+    where the windscreen already is, so it cannot spill onto the pillar or the
+    bonnet.
+    """
+    a = np.array(canvas).astype(float)
+    cx, cy = head
+    pad = int(70 * scale)
+    x1, y1 = max(0, cx - pad), max(0, cy - pad)
+    x2, y2 = min(a.shape[1], cx + pad), min(a.shape[0], cy + pad)
+
+    # Restrict to windscreen glass: mid-dark, low saturation.
+    reg = a[y1:y2, x1:x2]
+    lum = reg.mean(axis=2)
+    sat = reg.max(axis=2) - reg.min(axis=2)
+    glass = (lum > 15) & (lum < 150) & (sat < 70)
+
+    yy, xx = np.mgrid[y1:y2, x1:x2]
+    hr_x, hr_y = 13.0 * scale, 15.0 * scale
+    head_m = (((xx - cx) / hr_x) ** 2 + ((yy - cy) / hr_y) ** 2) <= 1.0
+
+    sy = cy + int(26 * scale)
+    sh_x, sh_y = 27.0 * scale, 20.0 * scale
+    shoulder_m = ((((xx - cx) / sh_x) ** 2 + ((yy - sy) / sh_y) ** 2) <= 1.0) & (yy >= cy + int(8 * scale))
+
+    figure = (head_m | shoulder_m) & glass
+    m = ndi.gaussian_filter(figure.astype(float), 3.0)
+    m = np.clip(m * 1.15, 0, 1)[:, :, None] * strength
+
+    a[y1:y2, x1:x2] = reg * (1 - m)
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
 def main():
     bg = background_plate()
     w, h = bg.size
@@ -173,6 +252,11 @@ def main():
     shadow = shadow.filter(ImageFilter.GaussianBlur(15))
     canvas = Image.composite(Image.new("RGB", (w, h), (0, 0, 0)), canvas, shadow)
     canvas.paste(truck, (px, py), truck)
+
+    # Cab treatments run on the composited plate, so their coordinates are in
+    # final plate space and stay valid if the truck is repositioned above.
+    canvas = tint_side_window(canvas)
+    canvas = add_driver(canvas)
 
     canvas.save(OUT_PNG)
     canvas.convert("RGB").save(OUT_WEBP, quality=90, method=6)
