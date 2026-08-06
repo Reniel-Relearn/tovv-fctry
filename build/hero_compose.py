@@ -22,6 +22,9 @@ ROOT = os.path.dirname(BUILD)
 
 SOURCE_PLATE = os.path.join(ROOT, "main", "MAIN-LANDING-PAGE.png")
 TRUCK_CUTOUT = os.path.join(ROOT, "main", "transparent-new-truck.png")
+# Same framing as the cutout, but not upscaled -- used to repair the badge.
+ORIGINAL_PHOTO = os.path.join(ROOT, "main", "new-truck-mmda.jpeg")
+BADGE_BOX = (1085, 588, 1228, 648)
 OUT_PNG = os.path.join(BUILD, "hero_art_crop.png")
 OUT_WEBP = os.path.join(BUILD, "hero_art.webp")
 
@@ -71,16 +74,57 @@ def background_plate():
     blank = foot & ~(is_map | is_glow)
     a[blank] = 0
 
-    # Crush whatever faint edge detail survived inside the footprint.
-    resid = foot & ~blank & ~is_map
-    f = a.astype(float)
-    f[resid] *= 0.55
-    return Image.fromarray(np.clip(f, 0, 255).astype(np.uint8))
+    # Deliberately no dimming pass here. An earlier version scaled the surviving
+    # glow inside the footprint to 55%, which left the red atmosphere darker
+    # inside that rectangle than outside it -- a visible black box between the
+    # truck and the map. Pixels that merely look warm already fail the strong
+    # red-dominance test above and were blanked, so nothing needs crushing.
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
+def repair_badge(arr):
+    """Restore the grille badge from the untouched photograph.
+
+    The supplied cutout has been AI-upscaled, and the upscaler misread the
+    ISUZU wordmark as "I5UZU". Both files share the same framing, so the badge
+    can be lifted straight across; it only needs exposure matching, because the
+    upscale also lifted the whole image by roughly 7%.
+    """
+    if not os.path.exists(ORIGINAL_PHOTO):
+        print("badge      : original photo missing, left as-is")
+        return arr
+
+    orig = np.array(Image.open(ORIGINAL_PHOTO).convert("RGB")).astype(float)
+    if orig.shape[:2] != arr.shape[:2]:
+        print("badge      : source sizes differ, left as-is")
+        return arr
+
+    x1, y1, x2, y2 = BADGE_BOX
+    pad = 14
+
+    # Match exposure using a ring just outside the badge, so the patch sits at
+    # the cutout's brightness rather than the photograph's.
+    ring_o = orig[y1 - pad:y1 - 2, x1:x2].reshape(-1, 3).mean(axis=0)
+    ring_c = arr[y1 - pad:y1 - 2, x1:x2, :3].reshape(-1, 3).mean(axis=0)
+    gain = np.clip(ring_c / np.maximum(ring_o, 1.0), 0.8, 1.4)
+
+    patch = np.clip(orig[y1:y2, x1:x2] * gain, 0, 255)
+
+    # Feather the edges so the repair has no visible border.
+    h, w = patch.shape[:2]
+    fy = np.minimum(np.arange(h), np.arange(h)[::-1]) / max(pad, 1)
+    fx = np.minimum(np.arange(w), np.arange(w)[::-1]) / max(pad, 1)
+    mask = np.clip(np.minimum.outer(fy, fx), 0, 1)[..., None]
+
+    arr[y1:y2, x1:x2, :3] = arr[y1:y2, x1:x2, :3] * (1 - mask) + patch * mask
+    print("badge      : repaired from original photo (gain {})".format(gain.round(3)))
+    return arr
 
 
 def graded_truck():
     """The cutout, de-hazed, scaled, and lit to match a night scene."""
     arr = np.array(Image.open(TRUCK_CUTOUT).convert("RGBA")).astype(float)
+    arr = repair_badge(arr)
     arr[:, :, 3] = np.clip((arr[:, :, 3] - ALPHA_CUT) / (255.0 - ALPHA_CUT), 0, 1) * 255.0
     t = Image.fromarray(arr.astype(np.uint8))
 
