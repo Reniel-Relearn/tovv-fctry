@@ -71,13 +71,15 @@ h1,h2,h3,h4,p{ margin:0; }
   --panel-2:#0b0b0c;
   --border:rgba(255,255,255,.10);
   --border-strong:rgba(255,255,255,.18);
-  --accent-rgb:165,2,1;
-  --accent-500:#a50201;
-  --accent-600:#8e0100;
-  --accent-700:#5d0304;
-  --accent-grad-start:#b00604;
-  --accent:#c60000;
-  --accent-text:#e94040; /* AA-contrast (5.3:1 on #000) for small text; --accent is reserved for large text, icons, and decorative use where the 3:1 graphical-object threshold applies */
+  /* Blue is the client's chosen brand accent, so it lives here as the base --
+     the page opens blue with no data-theme attribute set at all. */
+  --accent-rgb:29,78,216;
+  --accent-500:#1d4ed8;
+  --accent-600:#1e40af;
+  --accent-700:#1e3a8a;
+  --accent-grad-start:#2563eb;
+  --accent:#3b82f6;
+  --accent-text:#60a5fa; /* AA-contrast on #000 for small text; --accent is reserved for large text, icons, and decorative use where the 3:1 graphical-object threshold applies */
   --green:#00ff73;
   --cyan:#2fe5ec;
   --text-1:#ededed;
@@ -107,10 +109,20 @@ h1,h2,h3,h4,p{ margin:0; }
 
 /* ============================= ACCENT THEMES =============================
    Presentation-only color preview. Swapped live via the .theme-switcher
-   control (data-theme attribute on <html>); "red" is the approved mockup
-   default and matches the client's current brand truck/logo treatment.
-   Every other rule below reads colour only through the --accent-* tokens
-   above, so these four blocks are the single source of truth per palette. */
+   control (data-theme attribute on <html>). Blue is the client's chosen
+   accent and lives in :root above, so it needs no block here -- the page
+   opens blue with no attribute set. Red, the original mockup palette, is now
+   one of the alternates. Every other rule reads colour only through the
+   --accent-* tokens, so these blocks are the single source per palette. */
+html[data-theme="red"]{
+  --accent-rgb:165,2,1;
+  --accent-500:#a50201;
+  --accent-600:#8e0100;
+  --accent-700:#5d0304;
+  --accent-grad-start:#b00604;
+  --accent:#c60000;
+  --accent-text:#e94040;
+}
 html[data-theme="amber"]{
   --accent-rgb:146,64,14;
   --accent-500:#92400e;
@@ -119,15 +131,6 @@ html[data-theme="amber"]{
   --accent-grad-start:#b45309;
   --accent:#f59e0b;
   --accent-text:#fbbf24;
-}
-html[data-theme="blue"]{
-  --accent-rgb:29,78,216;
-  --accent-500:#1d4ed8;
-  --accent-600:#1e40af;
-  --accent-700:#1e3a8a;
-  --accent-grad-start:#2563eb;
-  --accent:#3b82f6;
-  --accent-text:#60a5fa;
 }
 html[data-theme="green"]{
   --accent-rgb:21,128,61;
@@ -2346,9 +2349,9 @@ h2.condensed{
   <div class="theme-switcher" role="group" aria-label="Preview color theme -- presentation aid only, not part of the final site">
     <span class="ts-label">Preview</span>
     <div class="ts-swatches">
-      <button class="theme-swatch" type="button" data-theme-set="red" aria-pressed="true" aria-label="Red (mockup default)"></button>
+      <button class="theme-swatch" type="button" data-theme-set="red" aria-pressed="false" aria-label="Red (original mockup palette)"></button>
       <button class="theme-swatch" type="button" data-theme-set="amber" aria-pressed="false" aria-label="Amber"></button>
-      <button class="theme-swatch" type="button" data-theme-set="blue" aria-pressed="false" aria-label="Blue"></button>
+      <button class="theme-swatch" type="button" data-theme-set="blue" aria-pressed="true" aria-label="Blue (default)"></button>
       <button class="theme-swatch" type="button" data-theme-set="green" aria-pressed="false" aria-label="Green"></button>
     </div>
   </div>
@@ -2371,7 +2374,11 @@ h2.condensed{
   /* ---------- Theme switcher (presentation preview only) ---------- */
   (function(){
     var THEMES = ['red','amber','blue','green'];
-    var STORAGE_KEY = 'towfactory-preview-theme';
+    var DEFAULT_THEME = 'blue';
+    // Key is versioned: browsers that previewed the old red-default build have
+    // a stored pick under the previous key, which would otherwise win over the
+    // new default and stop the page opening blue.
+    var STORAGE_KEY = 'towfactory-preview-theme-v2';
     var root = document.documentElement;
     var swatches = document.querySelectorAll('.theme-swatch');
     var wrap = document.getElementById('themeSwitcherWrap');
@@ -2379,7 +2386,9 @@ h2.condensed{
     var COLLAPSE_KEY = 'towfactory-preview-collapsed';
 
     function applyTheme(name){
-      if(name === 'red'){ root.removeAttribute('data-theme'); }
+      // The default palette lives in :root, so it is expressed as the absence
+      // of the attribute rather than a block of its own.
+      if(name === DEFAULT_THEME){ root.removeAttribute('data-theme'); }
       else{ root.setAttribute('data-theme', name); }
       swatches.forEach(function(btn){
         btn.setAttribute('aria-pressed', btn.getAttribute('data-theme-set') === name ? 'true' : 'false');
